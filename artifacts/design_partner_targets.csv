@@ -1,0 +1,31 @@
+company_name,category,likely_buyer_title,why_relevant,priority_score_1_to_5,manual_contact_research_needed
+Marqeta,issuer processors,VP Risk,"Modern issuer-processor with large authorization and chargeback volume across many programs; biased labels span every customer portfolio",5,yes
+Galileo Financial Technologies,issuer processors,Head of Fraud Risk,"Powers card programs for many fintechs; a corrected-label layer improves models across its whole book",5,yes
+Lithic,issuer processors,Head of Risk,"Developer-first card issuing with rich authorization data and fast-moving fraud teams open to new tooling",4,yes
+Highnote,issuer processors,Director of Risk,"Newer issuer-processor building risk tooling from scratch; good fit for upstream label correction",4,yes
+Mercury,fintech issuers,Head of Financial Crimes,"Business banking issuer with concentrated fraud exposure and an in-house risk team",4,yes
+Ramp,fintech issuers,Head of Fraud Risk,"Corporate card issuer training spend-fraud models on disputes that mature slowly",4,yes
+Brex,fintech issuers,VP Risk,"Card issuer with cross-border and high-value flows where reporting and maturity bias is severe",4,yes
+Cardless,fintech issuers,Head of Risk,"Co-brand card issuer with multiple partner portfolios, each with its own label bias",3,yes
+Petal,fintech issuers,Director of Fraud Strategy,"Issuer underwriting thin-file users where mislabeled fraud directly hits loss models",3,yes
+Stripe,PSPs,Risk Data Science Lead,"Massive card-not-present volume; Radar trains on disputes that censor true fraud heavily",5,yes
+Adyen,PSPs,Head of Risk ML,"Global PSP and acquirer with cross-border corridors where maturity delay is largest",5,yes
+Checkout.com,PSPs,VP Fraud and Risk,"PSP serving high-risk verticals where chargeback labels badly undercount true fraud",4,yes
+Nuvei,PSPs,Head of Risk,"PSP across regulated and high-risk segments with uneven reporting behavior",3,yes
+Rapyd,PSPs,Director of Risk,"Cross-border payments network with diverse local dispute and reporting norms",3,yes
+Fiserv,acquirers,SVP Risk Products,"Large acquirer-processor; corrected labels are horizontal infrastructure across its merchant base",5,yes
+Global Payments,acquirers,Head of Fraud Analytics,"Acquirer with broad merchant portfolios and legacy chargeback-based labeling",4,yes
+Worldpay,acquirers,Director of Risk Data Science,"High-volume acquirer where label maturity windows vary widely by merchant category",4,yes
+Elavon,acquirers,Head of Fraud Risk,"US Bank acquiring arm with conservative declines that censor fraud labels",3,yes
+Verifi,chargeback/dispute platforms,Head of Product,"Visa-owned dispute platform; deep chargeback timing data and an obvious distribution partner",5,yes
+Ethoca,chargeback/dispute platforms,Director of Analytics,"Mastercard-owned collaboration network with reporting-timing signals LabelLift consumes",5,yes
+Justt,chargeback/dispute platforms,Head of Data Science,"Dispute-automation vendor sitting on chargeback maturity data and merchant fraud labels",4,yes
+Chargeflow,chargeback/dispute platforms,Cofounder / Head of Data,"Dispute-automation startup, fast-moving, with merchant chargeback histories",3,yes
+Sift,fraud model vendors,VP Data Science,"Fraud-model vendor whose customers all train on biased dispute labels; LabelLift improves their target",5,yes
+Forter,fraud model vendors,Head of Risk Research,"Identity and fraud platform that would benefit from corrected pseudo-labels across merchants",4,yes
+Signifyd,fraud model vendors,Director of ML,"Guaranteed-fraud vendor whose economics depend directly on label accuracy",4,yes
+Sardine,fraud model vendors,Head of Risk ML,"Fraud and compliance platform built on modern ML, receptive to causal label methods",4,yes
+Feedzai,fraud model vendors,Principal Data Scientist,"Enterprise fraud-model vendor serving banks with long, biased label pipelines",4,yes
+Etsy,marketplace risk teams,Head of Marketplace Risk,"Marketplace where seller and payment fraud labels are reported and matured unevenly",3,yes
+StockX,marketplace risk teams,Director of Trust and Safety,"High-value resale marketplace with delayed disputes and concentrated fraud blind spots",3,yes
+Mercari,marketplace risk teams,Head of Trust and Safety,"Consumer marketplace with low reporting rates on low-value fraud, a core LabelLift case",3,yes
