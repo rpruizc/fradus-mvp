@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Conductor scratch / workspace
+.context/
+.gstack/
+
+# Generated synthetic data (regenerate with `python -m labellift.*` or the app buttons)
+data/synthetic_transactions.csv
+data/corrected_labels.csv
+data/backtest_metrics.csv
+
+# OS
+.DS_Store

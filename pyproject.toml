@@ -1,0 +1,14 @@
+[project]
+name = "labellift-mvp"
+version = "0.1.0"
+description = "LabelLift MVP — causal label infrastructure for fraud AI (synthetic demo)"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
