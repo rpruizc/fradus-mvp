@@ -14,6 +14,10 @@ reconstructs corrected pseudo-labels, and shows in a backtest that training on
 the corrected labels recovers more true synthetic fraud than training on the raw
 observed labels.
 
+Architecture: see [docs/architecture.md](docs/architecture.md) for the planned
+package, pipeline, API, and web UI boundary that replaces Streamlit as the product
+shell.
+
 ## What this is not
 
 - Not a production fraud-detection system and not a replacement for a customer's
