@@ -1,0 +1,2449 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+
+
+================================================================
+Directory Structure
+================================================================
+artifacts/
+  screenshots/
+    01_hero.png
+    02_label_funnel.png
+    03_blindspot_atlas.png
+    04_pseudo_labels.png
+    05_backtest.png
+  application_answers.md
+  demo_script.md
+  design_partner_targets.csv
+  outbound_messages.md
+  QA_REPORT.md
+  techstars_one_pager.md
+data/
+  .gitkeep
+labellift/
+  __init__.py
+  backtest.py
+  config.py
+  estimator.py
+  metrics.py
+  plots.py
+  propensities.py
+  synthetic_data.py
+tests/
+  test_backtest.py
+  test_estimator.py
+  test_synthetic_data.py
+.gitignore
+app.py
+pyproject.toml
+README.md
+requirements.txt
+
+================================================================
+Files
+================================================================
+
+================
+File: artifacts/application_answers.md
+================
+# LabelLift Application Answers
+
+Paste-ready. Each answer is under 120 words. No revenue, customer, or live-deployment
+claims.
+
+## Company one-liner
+
+LabelLift is causal label infrastructure for fraud AI: we reconstruct corrected
+pseudo-labels so banks and payment companies stop training fraud models on biased
+chargeback labels.
+
+## What are you building?
+
+We build an offline historical backtest that turns a customer's raw chargeback labels
+into corrected pseudo-labels for their existing fraud models. We estimate the
+probability each historical transaction was authorized, reported, and matured in time,
+then reweight and de-noise the observed labels. The output drops into the training
+pipeline a customer already runs — no change to their production authorization or
+decisioning stack. It is causal label infrastructure that sits upstream of model
+training, not another fraud model.
+
+## What problem are you solving?
+
+Fraud models are trained on chargebacks, but chargebacks are not ground truth.
+Declined transactions are never labeled, approved fraud is often never reported,
+reported fraud frequently matures after the training window, and observed labels get
+miscoded. Models therefore learn from a biased sample that undercounts true fraud, and
+the bias concentrates in specific issuers and corridors. Teams experience this as
+unexplained model decay and uneven performance, with no tooling to correct the
+training target itself.
+
+## Who is the customer?
+
+Mid-size fintech card issuers and issuer processors that already run a fraud model and
+hold historical authorization and chargeback data, but lack the causal-inference
+tooling to correct their training labels. Buyers are heads of fraud, risk-data science
+leads, and fraud-platform owners. We expand from issuers to PSPs, acquirers, and
+networks, which all train fraud models on the same kind of biased labels.
+
+## Why now?
+
+Payments are shifting card-not-present and cross-border, which widens the gap between
+true fraud and observed labels. Teams have invested in models and features but still
+train them on years of accumulated chargeback bias. Inverse-propensity and causal
+methods are now standard, and the inputs — authorization logs, dispute timing, reason
+codes — already sit inside every issuer and processor. The correction was impractical
+to productize before and is straightforward now.
+
+## What have you built?
+
+We have built a synthetic-data MVP that simulates the full payment-label pipeline on
+one million transactions, estimates authorization, reporting, and maturity
+propensities, reconstructs corrected pseudo-labels with a collapsed residual-weighted
+estimator, and visualizes fraud blind spots per issuer. A backtest shows that training
+on corrected pseudo-labels recovers more true synthetic fraud than training on raw
+observed labels. No real payment data is used; everything is reproducible from a fixed
+seed.
+
+## What is your wedge?
+
+A paid offline historical backtest. A customer hands us historical authorization and
+chargeback data; we return corrected pseudo-labels and a measured lift on their own
+matured holdout window. It is low-risk, touches nothing in production, and proves value
+on the customer's data before any model change. The backtest is how we convert a fraud
+team into a design partner and a design partner into a paid pilot.
+
+## What is your business model?
+
+A $50k paid historical backtest as the entry wedge, then $60k–$300k annual SaaS
+contracts for fintech issuers and PSPs, scaling to $500k+ enterprise contracts for
+large processors, acquirers, and networks. Pricing follows portfolio size and the
+number of models and entities served. The backtest both generates revenue and
+de-risks the pilot decision.
+
+## Why can this become large?
+
+Every issuer, processor, acquirer, PSP, and network trains fraud models on biased
+labels, so corrected-label infrastructure is horizontal, not a point tool. It is
+model-agnostic and sits beside whatever model a customer already runs, which makes it
+expand naturally across portfolios and entities. As more historical backtests run, the
+propensity and label-correction methodology compounds into a data and benchmarking
+advantage that is hard to copy.
+
+## What will you accomplish during Techstars?
+
+Secure 3–5 design partners and run historical label audits in month one. Demonstrate
+corrected-label lift on matured holdout windows in month two. Convert at least two
+design partners into paid pilots in month three. Alongside, harden the estimator from
+the collapsed MVP toward the full sequential version and stand up the first production
+data connectors.
+
+## Current status
+
+We have built a synthetic-data MVP that simulates the payment-label pipeline, estimates
+observation propensities, reconstructs corrected pseudo-labels, and visualizes fraud
+blind spots. The next step is running paid historical backtests with design partners.
+
+## Risks
+
+The correction depends on observation being explainable from covariates; strongly
+outcome-dependent censoring is harder and needs richer features. Inverse-propensity
+weighting is variance-sensitive where observation probabilities are very small, which
+production shrinkage must tame. Data access and procurement cycles at issuers are slow,
+so the paid backtest exists partly to shorten them. Finally, lift must be proven on
+real matured holdouts, not only synthetic data.
+
+================
+File: artifacts/demo_script.md
+================
+# LabelLift — 3-minute demo script
+
+Target length: ~3 minutes. Run `streamlit run app.py` and scroll top to bottom.
+
+## 0:00 — Open on the hero (beat 1 + 2)
+
+> "Every fraud team I talk to treats chargebacks as ground truth. They train their
+> models on them. But chargebacks are not ground truth — they're the *end* of a long
+> pipeline that quietly throws away most of the real fraud."
+
+Point at the four KPI cards.
+
+> "In this synthetic portfolio the true fraud rate is about 1.1%. But the labels the
+> model actually gets to see? About half a percent. The observed labels undercount
+> real fraud by nearly two times — and that gap is exactly what LabelLift rebuilds."
+
+## 0:35 — The label problem funnel (beat 2)
+
+> "Here's why. Of every true fraud, some are declined and never labeled. Of what's
+> approved, only some get reported. Of what's reported, only some mature inside the
+> training window. And then a chunk is simply miscoded."
+
+Trace the funnel down.
+
+> "By the time you reach the bottom, the model is training on a small, biased slice —
+> not the full fraud process. Chargebacks are censored four different ways."
+
+## 1:10 — LabelLift corrects it (beat 3)
+
+> "LabelLift is an offline engine. It estimates the probability each transaction was
+> authorized, reported, and matured, then reweights and de-noises the observed labels
+> into corrected pseudo-labels."
+
+Point back at the hero's "LabelLift corrected fraud rate."
+
+> "Notice the corrected rate lands right back near the true 1.1%. We reconstructed the
+> fraud the raw labels had hidden — without ever seeing the ground truth."
+
+## 1:40 — Blindspot Atlas (beat 4)
+
+> "And the bias isn't uniform. This is the Blindspot Atlas. Each row is an issuer.
+> The blindspot multiplier is how badly that issuer under-observes fraud."
+
+Point at the top rows and the scatter.
+
+> "Some issuers are off by five or six times. These are the portfolios where a fraud
+> model is most confidently wrong. LabelLift shows you exactly where to look."
+
+## 2:10 — Backtest (beat 5)
+
+> "Does correcting the labels actually help? We split the data, train one model on the
+> raw observed labels and one on LabelLift pseudo-labels, and score both against the
+> synthetic ground truth."
+
+Point at the bar chart.
+
+> "LabelLift wins on average precision, on precision at the top 1%, and on recall at
+> the top 1%. Same model, same features — just a better training target. In a real
+> pilot we'd evaluate on a later matured holdout instead of synthetic truth."
+
+## 2:40 — The wedge (beat 6)
+
+> "We don't ask anyone to rip out their stack. The wedge is a paid historical
+> backtest: give us your logs, we hand back corrected labels and the lift number on
+> your own data. That's how we turn a fraud team into a design partner, and a design
+> partner into a paid pilot."
+
+> "LabelLift — causal label infrastructure for fraud AI."
+
+================
+File: artifacts/design_partner_targets.csv
+================
+company_name,category,likely_buyer_title,why_relevant,priority_score_1_to_5,manual_contact_research_needed
+Marqeta,issuer processors,VP Risk,"Modern issuer-processor with large authorization and chargeback volume across many programs; biased labels span every customer portfolio",5,yes
+Galileo Financial Technologies,issuer processors,Head of Fraud Risk,"Powers card programs for many fintechs; a corrected-label layer improves models across its whole book",5,yes
+Lithic,issuer processors,Head of Risk,"Developer-first card issuing with rich authorization data and fast-moving fraud teams open to new tooling",4,yes
+Highnote,issuer processors,Director of Risk,"Newer issuer-processor building risk tooling from scratch; good fit for upstream label correction",4,yes
+Mercury,fintech issuers,Head of Financial Crimes,"Business banking issuer with concentrated fraud exposure and an in-house risk team",4,yes
+Ramp,fintech issuers,Head of Fraud Risk,"Corporate card issuer training spend-fraud models on disputes that mature slowly",4,yes
+Brex,fintech issuers,VP Risk,"Card issuer with cross-border and high-value flows where reporting and maturity bias is severe",4,yes
+Cardless,fintech issuers,Head of Risk,"Co-brand card issuer with multiple partner portfolios, each with its own label bias",3,yes
+Petal,fintech issuers,Director of Fraud Strategy,"Issuer underwriting thin-file users where mislabeled fraud directly hits loss models",3,yes
+Stripe,PSPs,Risk Data Science Lead,"Massive card-not-present volume; Radar trains on disputes that censor true fraud heavily",5,yes
+Adyen,PSPs,Head of Risk ML,"Global PSP and acquirer with cross-border corridors where maturity delay is largest",5,yes
+Checkout.com,PSPs,VP Fraud and Risk,"PSP serving high-risk verticals where chargeback labels badly undercount true fraud",4,yes
+Nuvei,PSPs,Head of Risk,"PSP across regulated and high-risk segments with uneven reporting behavior",3,yes
+Rapyd,PSPs,Director of Risk,"Cross-border payments network with diverse local dispute and reporting norms",3,yes
+Fiserv,acquirers,SVP Risk Products,"Large acquirer-processor; corrected labels are horizontal infrastructure across its merchant base",5,yes
+Global Payments,acquirers,Head of Fraud Analytics,"Acquirer with broad merchant portfolios and legacy chargeback-based labeling",4,yes
+Worldpay,acquirers,Director of Risk Data Science,"High-volume acquirer where label maturity windows vary widely by merchant category",4,yes
+Elavon,acquirers,Head of Fraud Risk,"US Bank acquiring arm with conservative declines that censor fraud labels",3,yes
+Verifi,chargeback/dispute platforms,Head of Product,"Visa-owned dispute platform; deep chargeback timing data and an obvious distribution partner",5,yes
+Ethoca,chargeback/dispute platforms,Director of Analytics,"Mastercard-owned collaboration network with reporting-timing signals LabelLift consumes",5,yes
+Justt,chargeback/dispute platforms,Head of Data Science,"Dispute-automation vendor sitting on chargeback maturity data and merchant fraud labels",4,yes
+Chargeflow,chargeback/dispute platforms,Cofounder / Head of Data,"Dispute-automation startup, fast-moving, with merchant chargeback histories",3,yes
+Sift,fraud model vendors,VP Data Science,"Fraud-model vendor whose customers all train on biased dispute labels; LabelLift improves their target",5,yes
+Forter,fraud model vendors,Head of Risk Research,"Identity and fraud platform that would benefit from corrected pseudo-labels across merchants",4,yes
+Signifyd,fraud model vendors,Director of ML,"Guaranteed-fraud vendor whose economics depend directly on label accuracy",4,yes
+Sardine,fraud model vendors,Head of Risk ML,"Fraud and compliance platform built on modern ML, receptive to causal label methods",4,yes
+Feedzai,fraud model vendors,Principal Data Scientist,"Enterprise fraud-model vendor serving banks with long, biased label pipelines",4,yes
+Etsy,marketplace risk teams,Head of Marketplace Risk,"Marketplace where seller and payment fraud labels are reported and matured unevenly",3,yes
+StockX,marketplace risk teams,Director of Trust and Safety,"High-value resale marketplace with delayed disputes and concentrated fraud blind spots",3,yes
+Mercari,marketplace risk teams,Head of Trust and Safety,"Consumer marketplace with low reporting rates on low-value fraud, a core LabelLift case",3,yes
+
+================
+File: artifacts/outbound_messages.md
+================
+# LabelLift outbound messages
+
+Three versions for design-partner outreach. No fabricated traction, no fabricated
+contacts. Personalize the bracketed fields before sending.
+
+Core message (the through-line for all three):
+
+> Fraud models trained on chargebacks systematically undercount true fraud because
+> declined, unreported, delayed, and miscoded transactions disappear from the
+> training data. LabelLift runs an offline historical backtest and outputs corrected
+> pseudo-labels for existing fraud models.
+
+CTA (all three):
+
+> Would you be open to a 20-minute design-partner call?
+
+---
+
+## 1. LinkedIn message (under 500 characters)
+
+Hi [First name] — quick one for a [Company] fraud lead. Fraud models trained on
+chargebacks systematically undercount true fraud: declined, unreported, delayed, and
+miscoded transactions vanish from the training data. LabelLift runs an offline
+historical backtest and outputs corrected pseudo-labels for your existing model — no
+change to production. Would you be open to a 20-minute design-partner call?
+
+(Character count: ~430)
+
+---
+
+## 2. Cold email (under 150 words)
+
+Subject: corrected fraud labels for [Company]'s model
+
+Hi [First name],
+
+Fraud models trained on chargebacks systematically undercount true fraud because
+declined, unreported, delayed, and miscoded transactions disappear from the training
+data. The bias isn't uniform — it concentrates in specific issuers, segments, and
+corridors, which is where a model is most confidently wrong.
+
+LabelLift runs an offline historical backtest and outputs corrected pseudo-labels for
+your existing fraud model. Nothing changes in production; we work from historical
+authorization and chargeback data and hand back corrected labels plus a measured lift
+on your own matured holdout window.
+
+We're selecting a small group of design partners for paid historical backtests.
+
+Would you be open to a 20-minute design-partner call?
+
+Best,
+[Your name]
+LabelLift — causal label infrastructure for fraud AI
+
+---
+
+## 3. Follow-up email (under 100 words)
+
+Subject: re: corrected fraud labels for [Company]'s model
+
+Hi [First name],
+
+Following up briefly. The one-line version: your fraud model is trained on chargebacks,
+and chargebacks quietly drop most true fraud before training. LabelLift reconstructs
+corrected pseudo-labels offline from your historical data and shows the lift on a
+matured holdout — no production change, no rip-and-replace.
+
+Worth a 20-minute design-partner call to see if your portfolio is a fit?
+
+Best,
+[Your name]
+
+================
+File: artifacts/QA_REPORT.md
+================
+# QA Report
+
+Integration and end-to-end QA for the LabelLift MVP. Environment: Python 3.11.15,
+fixed stack from `requirements.txt` (pandas 3.0, numpy 2.4, scikit-learn 1.9,
+scipy, plotly, streamlit 1.58, pytest, ruff). All data is synthetic, seed `42`.
+
+## Commands run
+
+```bash
+python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv (1,000,000 rows, 176 MB)
+python -m labellift.estimator         # -> data/corrected_labels.csv (304 MB)
+python -m labellift.backtest          # -> data/backtest_metrics.csv (2 rows)
+pytest                                # 27 passed
+ruff check .                          # All checks passed
+streamlit run app.py                  # dashboard renders, all 7 sections, no errors
+```
+
+## Pass/fail status
+
+| Check | Status |
+| --- | --- |
+| Synthetic dataset exists (1,000,000 rows) | PASS |
+| Corrected labels dataset exists | PASS |
+| Backtest metrics dataset exists | PASS |
+| `pytest` (27 tests across 3 files) | PASS |
+| `ruff check .` | PASS |
+| Dashboard loads via `streamlit run app.py` | PASS |
+| All charts render (funnel, scatter, histogram, bar) | PASS |
+| No Python tracebacks / Streamlit error boxes in UI | PASS |
+| No console errors in browser | PASS |
+| README instructions accurate | PASS |
+| No file-path / import / missing-dependency errors | PASS |
+| No real customer traction claims | PASS |
+| No real payment data | PASS |
+| No exposed secrets | PASS |
+| No external / paid API calls | PASS |
+
+### Synthetic data targets (verified)
+
+| Target | Required | Observed |
+| --- | --- | --- |
+| True fraud rate | 0.8%–1.5% | 1.10% |
+| Authorization rate | 82%–92% | 86.8% |
+| Fraud auth rate < legit auth rate | yes | 73.8% < 87.0% |
+| Reporting rate among authorized true fraud | 45%–75% | 47.9% |
+| Maturity rate among reported true fraud | 45%–80% | 53.7% |
+| Observed label rate < true fraud rate | yes | 0.55% < 1.10% |
+
+### Backtest result (LabelLift vs. raw observed labels)
+
+| Metric | Raw | LabelLift | LabelLift wins |
+| --- | --- | --- | --- |
+| Average precision | 0.0713 | 0.0740 | yes |
+| Precision @ 1% | 0.1390 | 0.1447 | yes |
+| Recall @ 1% | 0.1278 | 0.1330 | yes |
+| ROC-AUC | 0.8054 | 0.8103 | yes |
+
+LabelLift beats raw-label training on all three acceptance metrics (and ROC-AUC).
+The lift is modest and synthetic; it demonstrates the mechanism, not a production
+fraud-detection improvement.
+
+## Bugs found
+
+1. **Observation was outcome-dependent (MNAR).** The first synthetic generator made
+   the reporting probability depend directly on the latent `true_fraud` flag. That
+   violates the missing-at-random assumption LabelLift's inverse-propensity
+   correction relies on, so the corrected fraud rate was unrecoverable (it overshot
+   true prevalence by more than 10x).
+2. **Label-noise correction did nothing in aggregate.** The clipped, per-row
+   corrected label `(y - eps01)/(1 - eps10 - eps01)` collapses back to the raw
+   binary label after clipping, so it did not remove the false-positive miscoding
+   from any rate estimate.
+3. **Blindspot Atlas table rates were 100x too small.** Streamlit's
+   `NumberColumn(format=...)` applies printf to the raw fraction without scaling, so
+   `0.868` rendered as `0.9%` instead of `86.8%`.
+4. **Chart title overlapped the legend** in the backtest bar chart and the
+   pseudo-label histogram.
+5. **scikit-learn deprecation warning** from `LogisticRegression(n_jobs=-1)` (no-op
+   since sklearn 1.8).
+
+## Bugs fixed
+
+1. Reporting now depends only on covariates (a function of the fraud-risk score),
+   keeping observation missing-at-random. The Horvitz-Thompson reconstruction now
+   recovers ~0.99% against a true 1.10% rate.
+2. The dashboard's rate KPIs use the unclipped label correction in the
+   inverse-propensity sum, which cancels false-positive and false-negative miscoding
+   in aggregate. The clipped correction is retained only as the per-row training
+   label (which must stay in `[0, 1]`).
+3. The Blindspot Atlas converts fraction columns to percentage points before display.
+4. Both chart legends were moved below the plot area.
+5. Removed the deprecated `n_jobs` argument from every `LogisticRegression`.
+
+## Known remaining issues
+
+- Per-issuer corrected fraud rates in the Blindspot Atlas are noisier than the
+  aggregate and can overshoot true prevalence, because there is no empirical Bayes
+  issuer shrinkage yet (a deliberate MVP limitation).
+- `data/corrected_labels.csv` is ~304 MB; it is regenerable and git-ignored. First
+  dashboard load reads it once (~15 s) and then caches.
+- The synthetic dataset is large, so the propensity and backtest tests run on
+  deterministic sub-samples for speed; the full 1,000,000-row count is asserted
+  against the generated CSV.
+
+## Demo readiness
+
+Ready. A new user can follow the README, run the three module commands (or click the
+in-app generation buttons), and `streamlit run app.py` opens the full investor demo:
+hero KPIs, the label-problem funnel, the Blindspot Atlas, corrected pseudo-labels,
+the backtest, the integration pipeline, and the limitations. Screenshots are captured
+in `artifacts/screenshots/`. No credentials, database, or network access required.
+
+================
+File: artifacts/techstars_one_pager.md
+================
+# LabelLift
+
+## One-liner
+
+LabelLift fixes corrupted fraud-training labels before banks and payment companies
+train their fraud models.
+
+## Problem
+
+Fraud models are trained on chargebacks, but chargebacks are not ground truth. The
+training labels are systematically censored and corrupted before a model ever sees
+them:
+
+- Declined transactions are never labeled.
+- Approved fraud may never be reported.
+- Reported fraud may arrive too late for training.
+- Observed labels can be miscoded.
+
+The result is that models learn from a biased sample that undercounts true fraud,
+and the bias is concentrated in specific issuers, segments, and corridors — exactly
+where teams least want a blind spot.
+
+## Solution
+
+LabelLift is an offline label-reconstruction engine. It estimates the probability
+that each historical transaction was authorized, reported, and matured in time,
+then reweights and de-noises the observed labels into corrected pseudo-labels.
+Customers train their existing fraud models on these corrected pseudo-labels. It is
+not a replacement of production authorization systems — it sits upstream of model
+training and improves the target the model learns from.
+
+## Why now
+
+Fraud losses and false declines are both rising as payments move card-not-present
+and cross-border. Teams have invested heavily in models and features but still
+train them on chargeback labels that are years of accumulated bias. Causal and
+inverse-propensity methods are now standard tooling, and the data to run them
+(authorization logs, dispute timing, chargeback reason codes) already sits in every
+issuer and processor.
+
+## Initial customer
+
+Mid-size fintech card issuers and issuer processors that already run an in-house or
+vendor fraud model and have historical authorization and chargeback data, but lack
+the causal-inference tooling to correct their training labels. They feel the pain as
+unexplained model decay and uneven performance across portfolios.
+
+## MVP
+
+A synthetic-data MVP that simulates the full payment-label pipeline on 1,000,000
+transactions, estimates authorization / reporting / maturity propensities,
+reconstructs corrected pseudo-labels with a collapsed residual-weighted estimator,
+and visualizes fraud blind spots. A backtest shows that training on corrected
+pseudo-labels recovers more true synthetic fraud than training on raw observed
+labels. No real payment data is used.
+
+## Business model
+
+- A $50k paid historical backtest as the entry wedge.
+- $60k–$300k annual SaaS contracts for fintech issuers and PSPs.
+- $500k+ enterprise contracts for large processors, acquirers, or networks.
+
+## Why this can be venture-scale
+
+Every issuer, processor, acquirer, PSP, and network trains fraud models on biased
+labels, so the corrected-label layer is horizontal infrastructure rather than a
+point tool. It is model-agnostic and sits beside whatever model the customer already
+runs, which makes it expand-friendly across portfolios and entities. As more
+historical backtests run, the propensity and label-correction methodology compounds
+into a defensible data and benchmarking moat.
+
+## 90-day Techstars plan
+
+- Month 1: secure 3–5 design partners and run historical label audits.
+- Month 2: demonstrate corrected-label lift on matured holdout windows.
+- Month 3: convert at least two design partners into paid pilots.
+
+================
+File: data/.gitkeep
+================
+
+
+================
+File: labellift/__init__.py
+================
+"""LabelLift MVP package.
+
+Causal label infrastructure for fraud AI. This package implements a synthetic
+demonstration of the LabelLift label-reconstruction pipeline:
+
+- ``synthetic_data``  — generate the payment-label observation pipeline.
+- ``propensities``    — estimate authorization, reporting, and maturity propensities.
+- ``estimator``       — collapsed residual-weighted pseudo-label estimator.
+- ``backtest``        — compare raw-label vs. pseudo-label training.
+- ``metrics``         — precision/recall helpers at top-k%.
+- ``plots``           — Plotly figures for the Streamlit dashboard.
+
+All synthetic data is reproducible from ``config.RANDOM_SEED``.
+"""
+
+__version__ = "0.1.0"
+
+================
+File: labellift/backtest.py
+================
+"""Backtest: does training on LabelLift pseudo-labels recover more true fraud?
+
+Two models are trained on the same features and the same training rows:
+
+- Model A (``raw_observed_label_model``) — logistic regression on the raw observed
+  corrupted labels, the status quo for fraud teams.
+- Model B (``labellift_pseudo_label_model``) — a gradient-boosted regressor on the
+  continuous LabelLift pseudo-labels.
+
+Both are evaluated against synthetic ground-truth ``true_fraud`` on a held-out test
+split. Using ``true_fraud`` is only valid because this is simulated data.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import average_precision_score, roc_auc_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
+
+from .config import BACKTEST_METRICS_CSV, CORRECTED_LABELS_CSV
+from .metrics import precision_at_k_percent, recall_at_k_percent
+
+FEATURE_COLUMNS = [
+    "issuer_id",
+    "mcc",
+    "amount",
+    "country_pair",
+    "channel",
+    "device_risk",
+    "account_age_days",
+    "prior_decline_count",
+    "segment",
+]
+CATEGORICAL_FEATURES = ["issuer_id", "mcc", "country_pair", "channel", "segment"]
+NUMERIC_FEATURES = ["amount", "device_risk", "account_age_days", "prior_decline_count"]
+
+TRAIN_FRACTION = 0.70
+
+
+def _build_logistic_pipeline() -> Pipeline:
+    """One-hot + logistic-regression pipeline for the raw-label classifier (Model A)."""
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_FEATURES),
+            ("num", StandardScaler(), NUMERIC_FEATURES),
+        ]
+    )
+    return Pipeline(
+        steps=[
+            ("preprocess", preprocessor),
+            ("model", LogisticRegression(max_iter=1000)),
+        ]
+    )
+
+
+def _build_regressor_pipeline() -> Pipeline:
+    """Ordinal-encoded gradient-boosted regressor for the pseudo-label model (Model B)."""
+    n_categorical = len(CATEGORICAL_FEATURES)
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "cat",
+                OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1),
+                CATEGORICAL_FEATURES,
+            ),
+            ("num", "passthrough", NUMERIC_FEATURES),
+        ]
+    )
+    model = HistGradientBoostingRegressor(
+        random_state=42,
+        categorical_features=list(range(n_categorical)),
+    )
+    return Pipeline(steps=[("preprocess", preprocessor), ("model", model)])
+
+
+def _compute_metrics(y_true: pd.Series, y_score: np.ndarray) -> dict:
+    """Compute the full metric block comparing scores against synthetic ground truth."""
+    y_score = pd.Series(np.asarray(y_score, dtype=float))
+    return {
+        "roc_auc": float(roc_auc_score(y_true, y_score)),
+        "average_precision": float(average_precision_score(y_true, y_score)),
+        "precision_at_1_percent": precision_at_k_percent(y_true, y_score, 1.0),
+        "precision_at_5_percent": precision_at_k_percent(y_true, y_score, 5.0),
+        "recall_at_1_percent": recall_at_k_percent(y_true, y_score, 1.0),
+        "recall_at_5_percent": recall_at_k_percent(y_true, y_score, 5.0),
+        "mean_predicted_fraud_rate": float(np.asarray(y_score, dtype=float).mean()),
+        "true_fraud_rate": float(np.asarray(y_true, dtype=float).mean()),
+    }
+
+
+def run_backtest(df: pd.DataFrame) -> pd.DataFrame:
+    """Compare raw-label training against LabelLift pseudo-label training.
+
+    Returns a metrics dataframe with one row per model:
+    - raw_observed_label_model
+    - labellift_pseudo_label_model
+    """
+    ordered = df.sort_values("transaction_id").reset_index(drop=True)
+    n_train = int(len(ordered) * TRAIN_FRACTION)
+    train_df = ordered.iloc[:n_train]
+    test_df = ordered.iloc[n_train:]
+
+    y_test = test_df["true_fraud"].reset_index(drop=True)
+
+    # Model A: raw observed corrupted labels, observed training rows only.
+    observed_train = train_df[train_df["observed"] == 1]
+    model_a = _build_logistic_pipeline()
+    model_a.fit(
+        observed_train[FEATURE_COLUMNS],
+        observed_train["observed_label_corrupted"].astype(int),
+    )
+    score_a = model_a.predict_proba(test_df[FEATURE_COLUMNS])[:, 1]
+
+    # Model B: LabelLift pseudo-labels, all training rows.
+    model_b = _build_regressor_pipeline()
+    model_b.fit(train_df[FEATURE_COLUMNS], train_df["labellift_pseudo_label"])
+    score_b = np.clip(model_b.predict(test_df[FEATURE_COLUMNS]), 0.0, 1.0)
+
+    rows = [
+        {"model": "raw_observed_label_model", **_compute_metrics(y_test, score_a)},
+        {"model": "labellift_pseudo_label_model", **_compute_metrics(y_test, score_b)},
+    ]
+    return pd.DataFrame(rows)
+
+
+def main() -> None:
+    """Run the backtest on the corrected-label dataset and save the metrics."""
+    df = pd.read_csv(CORRECTED_LABELS_CSV)
+    metrics = run_backtest(df)
+    BACKTEST_METRICS_CSV.parent.mkdir(parents=True, exist_ok=True)
+    metrics.to_csv(BACKTEST_METRICS_CSV, index=False)
+    pd.set_option("display.width", 200)
+    pd.set_option("display.max_columns", 20)
+    print(metrics.to_string(index=False))
+    print(f"\nWrote backtest metrics to {BACKTEST_METRICS_CSV}")
+
+
+if __name__ == "__main__":
+    main()
+
+================
+File: labellift/config.py
+================
+"""Global configuration constants for the LabelLift MVP.
+
+Every script in this package is deterministic and seeded from ``RANDOM_SEED`` so
+that all outputs are fully reproducible.
+"""
+
+from pathlib import Path
+
+# Reproducibility ----------------------------------------------------------------
+RANDOM_SEED = 42
+
+# Synthetic dataset --------------------------------------------------------------
+N_TRANSACTIONS = 1_000_000
+TRAINING_WINDOW_DAYS = 30
+
+# Label corruption (miscoding) rates ---------------------------------------------
+LABEL_CORRUPTION_FALSE_NEGATIVE = 0.06
+LABEL_CORRUPTION_FALSE_POSITIVE = 0.08
+
+# Propensity clipping bounds -----------------------------------------------------
+PROPENSITY_FLOOR = 0.05
+PROPENSITY_CEILING = 0.98
+
+# Filesystem paths ---------------------------------------------------------------
+PACKAGE_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = PACKAGE_DIR.parent
+DATA_DIR = PROJECT_ROOT / "data"
+
+SYNTHETIC_TRANSACTIONS_CSV = DATA_DIR / "synthetic_transactions.csv"
+CORRECTED_LABELS_CSV = DATA_DIR / "corrected_labels.csv"
+BACKTEST_METRICS_CSV = DATA_DIR / "backtest_metrics.csv"
+
+================
+File: labellift/estimator.py
+================
+"""Collapsed LabelLift pseudo-label estimator (MVP).
+
+This is the MVP estimator, not the full production sequential triply robust
+estimator. It combines two corrections:
+
+1. Label-noise correction — undo the false-negative / false-positive miscoding of
+   observed labels.
+2. Inverse-observation weighting — upweight the residual of the rare observed
+   labels by ``1 / q_hat_total`` to recover fraud signal that censorship removed.
+
+The result is a continuous pseudo-label per transaction that an existing fraud
+model can be trained on.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from .config import (
+    CORRECTED_LABELS_CSV,
+    LABEL_CORRUPTION_FALSE_NEGATIVE,
+    LABEL_CORRUPTION_FALSE_POSITIVE,
+    SYNTHETIC_TRANSACTIONS_CSV,
+)
+
+FEATURE_COLUMNS = [
+    "issuer_id",
+    "mcc",
+    "amount",
+    "country_pair",
+    "channel",
+    "device_risk",
+    "account_age_days",
+    "prior_decline_count",
+    "segment",
+]
+CATEGORICAL_FEATURES = ["issuer_id", "mcc", "country_pair", "channel", "segment"]
+NUMERIC_FEATURES = ["amount", "device_risk", "account_age_days", "prior_decline_count"]
+
+REQUIRED_PROPENSITY_COLUMNS = [
+    "e_hat_authorization",
+    "r_hat_reporting",
+    "p_hat_maturity",
+    "q_hat_total",
+]
+
+
+def _build_logistic_pipeline() -> Pipeline:
+    """Build a one-hot + logistic-regression pipeline over the feature columns."""
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_FEATURES),
+            ("num", StandardScaler(), NUMERIC_FEATURES),
+        ]
+    )
+    return Pipeline(
+        steps=[
+            ("preprocess", preprocessor),
+            ("model", LogisticRegression(max_iter=1000)),
+        ]
+    )
+
+
+def train_baseline_fraud_model(df: pd.DataFrame) -> tuple[object, pd.Series]:
+    """Train a baseline fraud probability model using observed corrupted labels only.
+
+    Return the fitted model and fraud probability predictions for all rows.
+    """
+    observed_mask = df["observed"] == 1
+    pipeline = _build_logistic_pipeline()
+    pipeline.fit(
+        df.loc[observed_mask, FEATURE_COLUMNS],
+        df.loc[observed_mask, "observed_label_corrupted"].astype(int),
+    )
+    scores = pipeline.predict_proba(df[FEATURE_COLUMNS])[:, 1]
+    return pipeline, pd.Series(scores, index=df.index, name="baseline_fraud_score")
+
+
+def apply_label_corruption_correction(
+    y_observed: pd.Series,
+    false_negative_rate: float = LABEL_CORRUPTION_FALSE_NEGATIVE,
+    false_positive_rate: float = LABEL_CORRUPTION_FALSE_POSITIVE,
+) -> pd.Series:
+    """Apply binary label-noise correction:
+
+        y_corr = (y - eps01) / (1 - eps10 - eps01)
+
+    where ``eps01`` is the false-positive rate (a true 0 observed as 1) and
+    ``eps10`` is the false-negative rate (a true 1 observed as 0). Corrected
+    values are clipped to ``[0, 1]``. NaN inputs (unobserved rows) stay NaN.
+    """
+    eps01 = false_positive_rate
+    eps10 = false_negative_rate
+    corrected = (y_observed - eps01) / (1.0 - eps10 - eps01)
+    return corrected.clip(lower=0.0, upper=1.0)
+
+
+def compute_pseudo_labels(df: pd.DataFrame) -> pd.DataFrame:
+    """Compute LabelLift pseudo-labels using the collapsed residual-weighted estimator.
+
+    Required output columns:
+    - baseline_fraud_score
+    - observed_label_corrected
+    - inverse_observation_weight
+    - labellift_pseudo_label
+    - label_bias_delta
+
+    Raises:
+        ValueError: if the required propensity columns are not present in ``df``.
+    """
+    missing = [c for c in REQUIRED_PROPENSITY_COLUMNS if c not in df.columns]
+    if missing:
+        raise ValueError(
+            "compute_pseudo_labels requires propensity columns "
+            f"{REQUIRED_PROPENSITY_COLUMNS}; missing: {missing}. "
+            "Run estimate_propensities() first."
+        )
+
+    out = df.copy()
+    _, baseline_score = train_baseline_fraud_model(df)
+
+    observed_label_corrected = apply_label_corruption_correction(df["observed_label_corrupted"])
+    inverse_observation_weight = 1.0 / df["q_hat_total"]
+
+    observed = df["observed"].to_numpy(dtype=float)
+    baseline = baseline_score.to_numpy()
+    # Unobserved rows carry NaN corrected labels; they are masked out by ``observed``.
+    corrected_filled = observed_label_corrected.fillna(0.0).to_numpy()
+
+    pseudo = baseline + observed * inverse_observation_weight.to_numpy() * (
+        corrected_filled - baseline
+    )
+    pseudo = np.clip(pseudo, 0.0, 1.0)
+
+    out["baseline_fraud_score"] = baseline
+    out["observed_label_corrected"] = observed_label_corrected
+    out["inverse_observation_weight"] = inverse_observation_weight
+    out["labellift_pseudo_label"] = pseudo
+    out["label_bias_delta"] = out["labellift_pseudo_label"] - out["baseline_fraud_score"]
+    return out
+
+
+def main() -> None:
+    """Load synthetic data, estimate propensities, compute pseudo-labels, and save them."""
+    from .propensities import estimate_propensities
+
+    df = pd.read_csv(SYNTHETIC_TRANSACTIONS_CSV)
+    df = estimate_propensities(df)
+    df = compute_pseudo_labels(df)
+    CORRECTED_LABELS_CSV.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(CORRECTED_LABELS_CSV, index=False)
+    print(f"Wrote corrected labels for {len(df):,} rows to {CORRECTED_LABELS_CSV}")
+
+
+if __name__ == "__main__":
+    main()
+
+================
+File: labellift/metrics.py
+================
+"""Ranking metrics for the LabelLift backtest.
+
+Fraud teams operate at a fixed review budget, so top-k% precision and recall are
+the metrics that matter most. These helpers rank transactions by predicted score
+and measure how much true fraud is captured in the riskiest k%.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+
+def _top_k_indices(y_score: pd.Series, k_percent: float) -> np.ndarray:
+    """Return the indices of the highest-scoring k% of rows (at least one row)."""
+    scores = np.asarray(y_score, dtype=float)
+    n = scores.shape[0]
+    k = max(1, int(round(n * k_percent / 100.0)))
+    return np.argsort(-scores, kind="stable")[:k]
+
+
+def precision_at_k_percent(y_true: pd.Series, y_score: pd.Series, k_percent: float) -> float:
+    """Fraction of the top-k% highest-scoring transactions that are truly fraudulent."""
+    y_true_arr = np.asarray(y_true, dtype=float)
+    top = _top_k_indices(y_score, k_percent)
+    return float(y_true_arr[top].mean())
+
+
+def recall_at_k_percent(y_true: pd.Series, y_score: pd.Series, k_percent: float) -> float:
+    """Fraction of all true fraud captured within the top-k% highest-scoring transactions."""
+    y_true_arr = np.asarray(y_true, dtype=float)
+    total_positive = y_true_arr.sum()
+    if total_positive <= 0:
+        return 0.0
+    top = _top_k_indices(y_score, k_percent)
+    return float(y_true_arr[top].sum() / total_positive)
+
+================
+File: labellift/plots.py
+================
+"""Plotly figures for the LabelLift Streamlit dashboard.
+
+These helpers turn aggregated dataframes into investor-readable charts. They never
+load data themselves — the dashboard passes in prepared frames so every figure is
+fast to render even on the full synthetic dataset.
+"""
+
+from __future__ import annotations
+
+import pandas as pd
+import plotly.graph_objects as go
+
+# A small, consistent palette so the dashboard reads as one product.
+COLOR_OBSERVED = "#9aa7b8"  # muted slate — the censored view
+COLOR_LABELLIFT = "#2f6df6"  # LabelLift blue — the corrected view
+COLOR_TRUE = "#13b981"  # green — synthetic ground truth
+COLOR_FUNNEL = "#2f6df6"
+
+
+def label_problem_funnel(stage_counts: dict[str, int]) -> go.Figure:
+    """Funnel of how many transactions survive each censorship stage.
+
+    Args:
+        stage_counts: Ordered mapping of stage label -> count.
+    """
+    labels = list(stage_counts.keys())
+    values = list(stage_counts.values())
+    fig = go.Figure(
+        go.Funnel(
+            y=labels,
+            x=values,
+            textinfo="value+percent initial",
+            marker={"color": COLOR_FUNNEL},
+            connector={"line": {"color": COLOR_OBSERVED}},
+        )
+    )
+    fig.update_layout(
+        margin={"l": 10, "r": 10, "t": 30, "b": 10},
+        height=420,
+        title="How many transactions survive to become a fraud label",
+    )
+    return fig
+
+
+def blindspot_scatter(atlas: pd.DataFrame) -> go.Figure:
+    """Scatter of observed vs. corrected fraud rate per issuer.
+
+    Points above the diagonal are issuers whose true fraud is most undercounted by
+    the raw observed labels. Marker size encodes transaction volume.
+    """
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=atlas["observed_fraud_rate"],
+            y=atlas["corrected_fraud_rate"],
+            mode="markers",
+            marker={
+                "size": atlas["transaction_count"],
+                "sizemode": "area",
+                "sizeref": 2.0 * atlas["transaction_count"].max() / (40.0**2),
+                "sizemin": 4,
+                "color": atlas["blindspot_multiplier"],
+                "colorscale": "Blues",
+                "showscale": True,
+                "colorbar": {"title": "Blindspot<br>multiplier"},
+                "line": {"width": 1, "color": COLOR_LABELLIFT},
+            },
+            text=atlas["issuer_id"],
+            hovertemplate=(
+                "<b>%{text}</b><br>"
+                "observed fraud rate: %{x:.3%}<br>"
+                "corrected fraud rate: %{y:.3%}<extra></extra>"
+            ),
+        )
+    )
+    upper = float(
+        max(atlas["observed_fraud_rate"].max(), atlas["corrected_fraud_rate"].max())
+    ) * 1.1
+    fig.add_trace(
+        go.Scatter(
+            x=[0, upper],
+            y=[0, upper],
+            mode="lines",
+            line={"dash": "dash", "color": COLOR_OBSERVED},
+            name="observed = corrected",
+            hoverinfo="skip",
+        )
+    )
+    fig.update_layout(
+        margin={"l": 10, "r": 10, "t": 30, "b": 10},
+        height=460,
+        xaxis={"title": "Observed fraud rate (what the model sees)", "tickformat": ".2%"},
+        yaxis={"title": "LabelLift corrected fraud rate", "tickformat": ".2%"},
+        title="Per-issuer fraud blind spots",
+        showlegend=False,
+    )
+    return fig
+
+
+def pseudo_label_histogram(scores: pd.DataFrame) -> go.Figure:
+    """Overlaid histogram of baseline scores vs. LabelLift pseudo-labels."""
+    fig = go.Figure()
+    fig.add_trace(
+        go.Histogram(
+            x=scores["baseline_fraud_score"],
+            name="Baseline fraud score",
+            opacity=0.65,
+            marker_color=COLOR_OBSERVED,
+            nbinsx=60,
+        )
+    )
+    fig.add_trace(
+        go.Histogram(
+            x=scores["labellift_pseudo_label"],
+            name="LabelLift pseudo-label",
+            opacity=0.65,
+            marker_color=COLOR_LABELLIFT,
+            nbinsx=60,
+        )
+    )
+    fig.update_layout(
+        barmode="overlay",
+        margin={"l": 10, "r": 10, "t": 50, "b": 70},
+        height=420,
+        yaxis={"title": "Transactions", "type": "log"},
+        xaxis={"title": "Score"},
+        title="Baseline vs. LabelLift score distribution (log scale)",
+        legend={"orientation": "h", "y": -0.25, "x": 0},
+    )
+    return fig
+
+
+def backtest_bar(metrics: pd.DataFrame) -> go.Figure:
+    """Grouped bar comparing the two models on the headline ranking metrics."""
+    display_metrics = [
+        ("average_precision", "Average precision"),
+        ("precision_at_1_percent", "Precision @ 1%"),
+        ("recall_at_1_percent", "Recall @ 1%"),
+    ]
+    indexed = metrics.set_index("model")
+    model_styles = {
+        "raw_observed_label_model": ("Raw observed labels", COLOR_OBSERVED),
+        "labellift_pseudo_label_model": ("LabelLift pseudo-labels", COLOR_LABELLIFT),
+    }
+    fig = go.Figure()
+    x_labels = [label for _, label in display_metrics]
+    for model_key, (model_label, color) in model_styles.items():
+        if model_key not in indexed.index:
+            continue
+        row = indexed.loc[model_key]
+        fig.add_trace(
+            go.Bar(
+                name=model_label,
+                x=x_labels,
+                y=[float(row[col]) for col, _ in display_metrics],
+                marker_color=color,
+                text=[f"{float(row[col]):.3f}" for col, _ in display_metrics],
+                textposition="outside",
+            )
+        )
+    fig.update_layout(
+        barmode="group",
+        margin={"l": 10, "r": 10, "t": 50, "b": 60},
+        height=440,
+        yaxis={"title": "Score (higher is better)"},
+        title="Recovering true fraud: raw labels vs. LabelLift",
+        legend={"orientation": "h", "y": -0.15, "x": 0},
+    )
+    return fig
+
+================
+File: labellift/propensities.py
+================
+"""Observation-propensity models for LabelLift.
+
+A transaction only becomes an observable fraud label if it survives three
+sequential censorship gates: authorization, reporting, and maturity. This module
+estimates the probability of clearing each gate with plain scikit-learn logistic
+regression, then combines them into a single total observation propensity.
+
+    q_hat_total = e_hat_authorization * r_hat_reporting * p_hat_maturity
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from .config import PROPENSITY_CEILING, PROPENSITY_FLOOR
+
+FEATURE_COLUMNS = [
+    "issuer_id",
+    "mcc",
+    "amount",
+    "country_pair",
+    "channel",
+    "device_risk",
+    "account_age_days",
+    "prior_decline_count",
+    "segment",
+]
+CATEGORICAL_FEATURES = ["issuer_id", "mcc", "country_pair", "channel", "segment"]
+NUMERIC_FEATURES = ["amount", "device_risk", "account_age_days", "prior_decline_count"]
+
+
+def _build_logistic_pipeline() -> Pipeline:
+    """Build a one-hot + logistic-regression pipeline over the feature columns."""
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_FEATURES),
+            ("num", StandardScaler(), NUMERIC_FEATURES),
+        ]
+    )
+    return Pipeline(
+        steps=[
+            ("preprocess", preprocessor),
+            ("model", LogisticRegression(max_iter=1000)),
+        ]
+    )
+
+
+def _fit_predict_proba(
+    X_train: pd.DataFrame, y_train: pd.Series, X_all: pd.DataFrame
+) -> np.ndarray:
+    """Fit a logistic pipeline on a subset and predict positive-class probability for all rows."""
+    pipeline = _build_logistic_pipeline()
+    pipeline.fit(X_train, y_train)
+    return pipeline.predict_proba(X_all)[:, 1]
+
+
+def estimate_propensities(df: pd.DataFrame) -> pd.DataFrame:
+    """Estimate authorization, reporting, maturity, and total observation propensities.
+
+    Returns a copy of df with:
+    - e_hat_authorization
+    - r_hat_reporting
+    - p_hat_maturity
+    - q_hat_total
+
+    Each propensity model is fit on its relevant subset of rows but produces a
+    predicted probability for *every* row. Individual propensities are clipped to
+    ``[PROPENSITY_FLOOR, PROPENSITY_CEILING]`` and the total is their product.
+    """
+    out = df.copy()
+    features = df[FEATURE_COLUMNS]
+
+    # Authorization model: trained on all rows.
+    e_hat = _fit_predict_proba(features, df["authorized"], features)
+
+    # Reporting model: trained only on authorized rows.
+    auth_mask = df["authorized"] == 1
+    r_hat = _fit_predict_proba(features[auth_mask], df.loc[auth_mask, "reported"], features)
+
+    # Maturity model: trained only on authorized & reported rows.
+    reported_mask = auth_mask & (df["reported"] == 1)
+    p_hat = _fit_predict_proba(
+        features[reported_mask], df.loc[reported_mask, "matured_by_training"], features
+    )
+
+    e_hat = np.clip(e_hat, PROPENSITY_FLOOR, PROPENSITY_CEILING)
+    r_hat = np.clip(r_hat, PROPENSITY_FLOOR, PROPENSITY_CEILING)
+    p_hat = np.clip(p_hat, PROPENSITY_FLOOR, PROPENSITY_CEILING)
+
+    out["e_hat_authorization"] = e_hat
+    out["r_hat_reporting"] = r_hat
+    out["p_hat_maturity"] = p_hat
+    out["q_hat_total"] = e_hat * r_hat * p_hat
+    return out
+
+
+def main() -> None:
+    """Estimate propensities on the synthetic dataset and print a short summary."""
+    from .config import SYNTHETIC_TRANSACTIONS_CSV
+
+    df = pd.read_csv(SYNTHETIC_TRANSACTIONS_CSV)
+    out = estimate_propensities(df)
+    columns = ["e_hat_authorization", "r_hat_reporting", "p_hat_maturity", "q_hat_total"]
+    print(out[columns].describe())
+
+
+if __name__ == "__main__":
+    main()
+
+================
+File: labellift/synthetic_data.py
+================
+"""Deterministic synthetic payment-label observation pipeline.
+
+This module simulates the journey a transaction takes before it can ever become a
+fraud-training label:
+
+    true_fraud  ->  authorized  ->  reported  ->  matured_by_training  ->  observed
+
+Each stage censors the data. The point of the LabelLift MVP is that fraud models
+only ever see the final ``observed`` slice, which is a biased sample of true fraud.
+
+All randomness flows from a single seeded NumPy generator so the dataset is exactly
+reproducible. No real financial, cardholder, issuer, or merchant data is used — every
+value here is synthetic.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+from .config import (
+    LABEL_CORRUPTION_FALSE_NEGATIVE,
+    LABEL_CORRUPTION_FALSE_POSITIVE,
+    N_TRANSACTIONS,
+    RANDOM_SEED,
+    SYNTHETIC_TRANSACTIONS_CSV,
+    TRAINING_WINDOW_DAYS,
+)
+
+# --- Fixed synthetic design ----------------------------------------------------
+N_ISSUERS = 50
+N_MERCHANTS = 2_000
+
+MCC_VALUES = [
+    "digital_goods",
+    "travel",
+    "marketplace",
+    "electronics",
+    "grocery",
+    "gaming",
+    "subscription",
+    "luxury",
+]
+COUNTRY_PAIRS = ["domestic", "cross_border", "high_risk_cross_border"]
+CHANNELS = ["card_present", "card_not_present", "wallet"]
+HIGH_RISK_MCCS = {"gaming", "luxury", "digital_goods", "travel"}
+
+# Categorical sampling weights (must each sum to 1.0).
+MCC_PROBS = [0.16, 0.10, 0.14, 0.16, 0.18, 0.08, 0.12, 0.06]
+COUNTRY_PAIR_PROBS = [0.70, 0.22, 0.08]
+CHANNEL_PROBS = [0.45, 0.45, 0.10]
+
+# --- True-fraud logistic coefficients ------------------------------------------
+FRAUD_INTERCEPT = -6.45
+FRAUD_COEF_AMOUNT = 0.55
+FRAUD_COEF_CROSS_BORDER = 0.70
+FRAUD_COEF_HIGH_RISK_CB = 1.50
+FRAUD_COEF_CNP = 0.85
+FRAUD_COEF_WALLET = 0.20
+FRAUD_COEF_DEVICE = 0.90
+FRAUD_COEF_AGE = -0.50  # young accounts (low age z-score) are riskier
+FRAUD_COEF_DECLINE = 0.45
+FRAUD_COEF_HIGH_RISK_MCC = 0.50
+
+# --- Authorization logistic coefficients ---------------------------------------
+AUTH_INTERCEPT = 2.30
+AUTH_COEF_FRAUD_PROB = 3.50  # subtracted: higher fraud prob -> more declines
+AUTH_COEF_HIGH_RISK_CB = 0.80
+AUTH_COEF_DEVICE = 0.40
+AUTH_COEF_CNP = 0.30
+AUTH_COEF_DECLINE = 0.25
+
+# --- Reporting logistic coefficients -------------------------------------------
+# Reporting depends only on observable covariates (a function of the fraud-risk
+# score), never on the latent ``true_fraud`` flag. This keeps the observation
+# process missing-at-random given X, which is exactly the assumption LabelLift's
+# inverse-propensity correction relies on. Risky transactions are reported more
+# often, so true fraud is still reported more than legit traffic on average.
+REPORT_INTERCEPT = -4.65
+REPORT_COEF_RISK = 3.20  # higher fraud-risk score -> more likely to be reported
+REPORT_COEF_AMOUNT = 0.35  # low-value transactions are less likely to be reported
+ISSUER_REPORT_EFFECT_SD = 0.45
+SEGMENT_REPORT_EFFECT_SD = 0.35
+
+# --- Maturity logistic coefficients --------------------------------------------
+MATURITY_INTERCEPT = 1.35
+MATURITY_COEF_CROSS_BORDER = 0.90
+MATURITY_COEF_HIGH_RISK_CB = 1.40
+MATURITY_COEF_TRAVEL = 1.00
+MATURITY_COEF_MARKETPLACE = 0.80
+MATURITY_COEF_SLOW_ISSUER = 1.30
+N_SLOW_ISSUERS = 10  # ISSUER_001 .. ISSUER_010 settle slowly
+
+MAX_DELAY_DAYS = 120
+
+
+def _sigmoid(x: np.ndarray) -> np.ndarray:
+    """Numerically stable logistic sigmoid."""
+    return 1.0 / (1.0 + np.exp(-x))
+
+
+def _zscore(x: np.ndarray) -> np.ndarray:
+    """Standardize an array to zero mean and unit variance."""
+    return (x - x.mean()) / x.std()
+
+
+def generate_synthetic_transactions(
+    n: int = N_TRANSACTIONS,
+    seed: int = RANDOM_SEED,
+) -> pd.DataFrame:
+    """Generate the deterministic synthetic transaction dataset.
+
+    Args:
+        n: Number of transactions to generate.
+        seed: Random seed controlling every stochastic draw.
+
+    Returns:
+        A dataframe with one row per synthetic transaction and every column
+        required by the LabelLift pipeline.
+    """
+    rng = np.random.default_rng(seed)
+
+    # --- Identifiers & raw features --------------------------------------------
+    issuer_labels = np.array([f"ISSUER_{i + 1:03d}" for i in range(N_ISSUERS)])
+    merchant_labels = np.array([f"MERCHANT_{i + 1:04d}" for i in range(N_MERCHANTS)])
+
+    issuer_idx = rng.integers(0, N_ISSUERS, n)
+    merchant_idx = rng.integers(0, N_MERCHANTS, n)
+    mcc_idx = rng.choice(len(MCC_VALUES), size=n, p=MCC_PROBS)
+    cp_idx = rng.choice(len(COUNTRY_PAIRS), size=n, p=COUNTRY_PAIR_PROBS)
+    ch_idx = rng.choice(len(CHANNELS), size=n, p=CHANNEL_PROBS)
+
+    issuer_id = issuer_labels[issuer_idx]
+    merchant_id = merchant_labels[merchant_idx]
+    mcc = np.array(MCC_VALUES)[mcc_idx]
+    country_pair = np.array(COUNTRY_PAIRS)[cp_idx]
+    channel = np.array(CHANNELS)[ch_idx]
+
+    amount = np.round(np.clip(np.exp(rng.normal(3.4, 1.0, n)), 1.0, 50_000.0), 2)
+    device_risk = np.round(rng.beta(2.0, 5.0, n), 4)
+    account_age_days = np.clip(rng.exponential(500.0, n), 0, 3650).astype(int)
+    prior_decline_count = rng.poisson(0.30, n).astype(int)
+
+    segment = np.char.add(
+        np.char.add(np.char.add(np.char.add(mcc, "__"), country_pair), "__"), channel
+    )
+
+    # --- Convenience flags -----------------------------------------------------
+    cross_border = (country_pair == "cross_border").astype(float)
+    high_risk_cb = (country_pair == "high_risk_cross_border").astype(float)
+    cnp = (channel == "card_not_present").astype(float)
+    wallet = (channel == "wallet").astype(float)
+    high_risk_mcc = np.isin(mcc, list(HIGH_RISK_MCCS)).astype(float)
+    travel = (mcc == "travel").astype(float)
+    marketplace = (mcc == "marketplace").astype(float)
+    slow_issuer = (issuer_idx < N_SLOW_ISSUERS).astype(float)
+
+    amount_z = _zscore(np.log(amount))
+    device_z = _zscore(device_risk)
+    age_z = _zscore(account_age_days.astype(float))
+
+    # --- 1. True fraud ---------------------------------------------------------
+    logit_fraud = (
+        FRAUD_INTERCEPT
+        + FRAUD_COEF_AMOUNT * amount_z
+        + FRAUD_COEF_CROSS_BORDER * cross_border
+        + FRAUD_COEF_HIGH_RISK_CB * high_risk_cb
+        + FRAUD_COEF_CNP * cnp
+        + FRAUD_COEF_WALLET * wallet
+        + FRAUD_COEF_DEVICE * device_z
+        + FRAUD_COEF_AGE * age_z
+        + FRAUD_COEF_DECLINE * prior_decline_count
+        + FRAUD_COEF_HIGH_RISK_MCC * high_risk_mcc
+    )
+    true_fraud_probability = _sigmoid(logit_fraud)
+    true_fraud = (rng.random(n) < true_fraud_probability).astype(int)
+
+    # --- 2. Authorization (declined transactions are never labeled) ------------
+    logit_auth = (
+        AUTH_INTERCEPT
+        - AUTH_COEF_FRAUD_PROB * true_fraud_probability
+        - AUTH_COEF_HIGH_RISK_CB * high_risk_cb
+        - AUTH_COEF_DEVICE * device_z
+        - AUTH_COEF_CNP * cnp
+        - AUTH_COEF_DECLINE * (prior_decline_count > 0).astype(float)
+    )
+    authorization_probability = _sigmoid(logit_auth)
+    authorized = (rng.random(n) < authorization_probability).astype(int)
+
+    # --- 3. Reporting (only meaningful when authorized) ------------------------
+    issuer_report_effect = rng.normal(0.0, ISSUER_REPORT_EFFECT_SD, N_ISSUERS)[issuer_idx]
+    seg_unique, seg_codes = np.unique(segment, return_inverse=True)
+    segment_report_effect = rng.normal(0.0, SEGMENT_REPORT_EFFECT_SD, len(seg_unique))[seg_codes]
+
+    fraud_risk_z = _zscore(logit_fraud)  # covariate-only risk signal
+    logit_report = (
+        REPORT_INTERCEPT
+        + REPORT_COEF_RISK * fraud_risk_z
+        + REPORT_COEF_AMOUNT * amount_z
+        + issuer_report_effect
+        + segment_report_effect
+    )
+    reporting_probability = np.where(authorized == 1, _sigmoid(logit_report), 0.0)
+    reported = ((rng.random(n) < reporting_probability) & (authorized == 1)).astype(int)
+
+    # --- 4. Delay & maturity (only meaningful when authorized and reported) ----
+    logit_maturity = (
+        MATURITY_INTERCEPT
+        - MATURITY_COEF_CROSS_BORDER * cross_border
+        - MATURITY_COEF_HIGH_RISK_CB * high_risk_cb
+        - MATURITY_COEF_TRAVEL * travel
+        - MATURITY_COEF_MARKETPLACE * marketplace
+        - MATURITY_COEF_SLOW_ISSUER * slow_issuer
+    )
+    maturity_probability = _sigmoid(logit_maturity)
+
+    applicable = (authorized == 1) & (reported == 1)
+    matured_draw = rng.random(n) < maturity_probability
+    fast = applicable & matured_draw
+    slow = applicable & ~matured_draw
+
+    label_delay_days = np.full(n, np.nan)
+    label_delay_days[fast] = rng.integers(1, TRAINING_WINDOW_DAYS + 1, fast.sum())
+    label_delay_days[slow] = rng.integers(
+        TRAINING_WINDOW_DAYS + 1, MAX_DELAY_DAYS + 1, slow.sum()
+    )
+    matured_by_training = (applicable & (label_delay_days <= TRAINING_WINDOW_DAYS)).astype(int)
+
+    # --- 5. Observation & label corruption -------------------------------------
+    observed = ((authorized == 1) & (reported == 1) & (matured_by_training == 1)).astype(int)
+
+    observed_label_raw = np.where(observed == 1, true_fraud.astype(float), np.nan)
+
+    corrupted = true_fraud.astype(float).copy()
+    flip = rng.random(n)
+    fn_mask = (observed == 1) & (true_fraud == 1) & (flip < LABEL_CORRUPTION_FALSE_NEGATIVE)
+    fp_mask = (observed == 1) & (true_fraud == 0) & (flip < LABEL_CORRUPTION_FALSE_POSITIVE)
+    corrupted[fn_mask] = 0.0
+    corrupted[fp_mask] = 1.0
+    observed_label_corrupted = np.where(observed == 1, corrupted, np.nan)
+
+    transaction_id = np.array([f"TXN_{i:08d}" for i in range(n)])
+
+    df = pd.DataFrame(
+        {
+            "transaction_id": transaction_id,
+            "issuer_id": issuer_id,
+            "merchant_id": merchant_id,
+            "mcc": mcc,
+            "amount": amount,
+            "country_pair": country_pair,
+            "channel": channel,
+            "device_risk": device_risk,
+            "account_age_days": account_age_days,
+            "prior_decline_count": prior_decline_count,
+            "true_fraud_probability": np.round(true_fraud_probability, 6),
+            "true_fraud": true_fraud,
+            "authorization_probability": np.round(authorization_probability, 6),
+            "authorized": authorized,
+            "reporting_probability": np.round(reporting_probability, 6),
+            "reported": reported,
+            "label_delay_days": label_delay_days,
+            "maturity_probability": np.round(maturity_probability, 6),
+            "matured_by_training": matured_by_training,
+            "observed_label_raw": observed_label_raw,
+            "observed_label_corrupted": observed_label_corrupted,
+            "observed": observed,
+            "segment": segment,
+        }
+    )
+    return df
+
+
+def save_synthetic_transactions(df: pd.DataFrame, path=SYNTHETIC_TRANSACTIONS_CSV) -> None:
+    """Write the synthetic dataset to ``path`` as CSV, creating parent dirs."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(path, index=False)
+
+
+def main() -> None:
+    """Generate the full synthetic dataset and write it to the data directory."""
+    df = generate_synthetic_transactions()
+    save_synthetic_transactions(df)
+    print(f"Wrote {len(df):,} synthetic transactions to {SYNTHETIC_TRANSACTIONS_CSV}")
+
+
+if __name__ == "__main__":
+    main()
+
+================
+File: tests/test_backtest.py
+================
+"""Tests for the backtest engine (Agent 5) and its ranking-metric helpers."""
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from labellift.backtest import run_backtest
+from labellift.estimator import compute_pseudo_labels
+from labellift.metrics import precision_at_k_percent, recall_at_k_percent
+from labellift.propensities import estimate_propensities
+from labellift.synthetic_data import generate_synthetic_transactions
+
+METRIC_COLUMNS = [
+    "roc_auc",
+    "average_precision",
+    "precision_at_1_percent",
+    "precision_at_5_percent",
+    "recall_at_1_percent",
+    "recall_at_5_percent",
+    "mean_predicted_fraud_rate",
+    "true_fraud_rate",
+]
+BOUNDED_COLUMNS = [
+    "precision_at_1_percent",
+    "precision_at_5_percent",
+    "recall_at_1_percent",
+    "recall_at_5_percent",
+]
+
+
+@pytest.fixture(scope="module")
+def backtest_metrics() -> pd.DataFrame:
+    """Run the full pipeline on a small deterministic sample and return metrics."""
+    df = generate_synthetic_transactions(n=80_000, seed=42)
+    df = estimate_propensities(df)
+    df = compute_pseudo_labels(df)
+    return run_backtest(df)
+
+
+def test_backtest_returns_two_rows(backtest_metrics: pd.DataFrame) -> None:
+    assert len(backtest_metrics) == 2
+    assert set(backtest_metrics["model"]) == {
+        "raw_observed_label_model",
+        "labellift_pseudo_label_model",
+    }
+
+
+def test_metric_columns_exist(backtest_metrics: pd.DataFrame) -> None:
+    for column in METRIC_COLUMNS:
+        assert column in backtest_metrics.columns
+
+
+def test_metric_values_finite(backtest_metrics: pd.DataFrame) -> None:
+    assert np.isfinite(backtest_metrics[METRIC_COLUMNS].to_numpy()).all()
+
+
+def test_precision_recall_in_unit_interval(backtest_metrics: pd.DataFrame) -> None:
+    for column in BOUNDED_COLUMNS:
+        values = backtest_metrics[column]
+        assert values.min() >= 0.0, (column, values.min())
+        assert values.max() <= 1.0, (column, values.max())
+
+
+# --- metric helper unit tests --------------------------------------------------
+def test_precision_at_k_percent_perfect_ranking() -> None:
+    # 100 rows, 10 positives ranked at the very top.
+    y_true = pd.Series([1] * 10 + [0] * 90)
+    y_score = pd.Series(list(range(100, 0, -1)))
+    # Top 10% = 10 rows, all positive.
+    assert precision_at_k_percent(y_true, y_score, 10.0) == 1.0
+    assert recall_at_k_percent(y_true, y_score, 10.0) == 1.0
+
+
+def test_recall_at_k_percent_partial() -> None:
+    y_true = pd.Series([1] * 10 + [0] * 90)
+    y_score = pd.Series(list(range(100, 0, -1)))
+    # Top 5% = 5 rows, all positive -> recall 5/10.
+    assert recall_at_k_percent(y_true, y_score, 5.0) == 0.5
+
+
+def test_recall_with_no_positives_is_zero() -> None:
+    y_true = pd.Series([0, 0, 0, 0])
+    y_score = pd.Series([0.1, 0.9, 0.5, 0.2])
+    assert recall_at_k_percent(y_true, y_score, 50.0) == 0.0
+
+================
+File: tests/test_estimator.py
+================
+"""Tests for the propensity models (Agent 3) and the LabelLift estimator (Agent 4)."""
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from labellift.config import PROPENSITY_CEILING, PROPENSITY_FLOOR
+from labellift.estimator import (
+    apply_label_corruption_correction,
+    compute_pseudo_labels,
+)
+from labellift.propensities import estimate_propensities
+from labellift.synthetic_data import generate_synthetic_transactions
+
+PROPENSITY_COLUMNS = [
+    "e_hat_authorization",
+    "r_hat_reporting",
+    "p_hat_maturity",
+    "q_hat_total",
+]
+ESTIMATOR_COLUMNS = [
+    "baseline_fraud_score",
+    "observed_label_corrected",
+    "inverse_observation_weight",
+    "labellift_pseudo_label",
+    "label_bias_delta",
+]
+
+
+@pytest.fixture(scope="module")
+def base_df() -> pd.DataFrame:
+    """Deterministic 80k-row sample (fast enough to fit logistic models in tests)."""
+    return generate_synthetic_transactions(n=80_000, seed=42)
+
+
+@pytest.fixture(scope="module")
+def propensity_df(base_df: pd.DataFrame) -> pd.DataFrame:
+    """Sample with the four estimated propensity columns attached."""
+    return estimate_propensities(base_df)
+
+
+@pytest.fixture(scope="module")
+def pseudo_df(propensity_df: pd.DataFrame) -> pd.DataFrame:
+    """Sample with the LabelLift pseudo-label columns attached."""
+    return compute_pseudo_labels(propensity_df)
+
+
+# --- Agent 3: propensities -----------------------------------------------------
+def test_propensity_columns_exist(propensity_df: pd.DataFrame) -> None:
+    for column in PROPENSITY_COLUMNS:
+        assert column in propensity_df.columns
+
+
+def test_individual_propensities_within_bounds(propensity_df: pd.DataFrame) -> None:
+    for column in ["e_hat_authorization", "r_hat_reporting", "p_hat_maturity"]:
+        values = propensity_df[column]
+        assert values.min() >= PROPENSITY_FLOOR - 1e-9, (column, values.min())
+        assert values.max() <= PROPENSITY_CEILING + 1e-9, (column, values.max())
+
+
+def test_total_propensity_positive_and_below_one(propensity_df: pd.DataFrame) -> None:
+    q = propensity_df["q_hat_total"]
+    assert q.min() > 0.0
+    assert q.max() < 1.0
+
+
+def test_total_propensity_is_product(propensity_df: pd.DataFrame) -> None:
+    expected = (
+        propensity_df["e_hat_authorization"]
+        * propensity_df["r_hat_reporting"]
+        * propensity_df["p_hat_maturity"]
+    )
+    np.testing.assert_allclose(propensity_df["q_hat_total"], expected, rtol=1e-9)
+
+
+def test_no_nans_in_propensities(propensity_df: pd.DataFrame) -> None:
+    assert not propensity_df[PROPENSITY_COLUMNS].isna().any().any()
+
+
+def test_estimate_propensities_does_not_mutate_input(base_df: pd.DataFrame) -> None:
+    before = set(base_df.columns)
+    estimate_propensities(base_df)
+    assert set(base_df.columns) == before
+
+
+# --- Agent 4: estimator --------------------------------------------------------
+def test_estimator_columns_exist(pseudo_df: pd.DataFrame) -> None:
+    for column in ESTIMATOR_COLUMNS:
+        assert column in pseudo_df.columns
+
+
+def test_pseudo_labels_in_unit_interval(pseudo_df: pd.DataFrame) -> None:
+    pseudo = pseudo_df["labellift_pseudo_label"]
+    assert pseudo.min() >= 0.0
+    assert pseudo.max() <= 1.0
+    assert not pseudo.isna().any()
+
+
+def test_inverse_weights_positive(pseudo_df: pd.DataFrame) -> None:
+    assert (pseudo_df["inverse_observation_weight"] > 0).all()
+
+
+def test_corrected_labels_in_unit_interval_where_observed(pseudo_df: pd.DataFrame) -> None:
+    corrected = pseudo_df.loc[pseudo_df["observed"] == 1, "observed_label_corrected"]
+    assert corrected.min() >= 0.0
+    assert corrected.max() <= 1.0
+    assert not corrected.isna().any()
+
+
+def test_missing_propensities_raises(base_df: pd.DataFrame) -> None:
+    with pytest.raises(ValueError):
+        compute_pseudo_labels(base_df)
+
+
+def test_label_corruption_correction_formula() -> None:
+    y = pd.Series([0.0, 1.0])
+    corrected = apply_label_corruption_correction(y, 0.06, 0.08)
+    assert corrected.min() >= 0.0
+    assert corrected.max() <= 1.0
+
+================
+File: tests/test_synthetic_data.py
+================
+"""Tests for the synthetic payment-label data generator."""
+
+from pathlib import Path
+
+import pandas as pd
+import pytest
+
+from labellift.config import N_TRANSACTIONS, SYNTHETIC_TRANSACTIONS_CSV
+from labellift.synthetic_data import generate_synthetic_transactions
+
+REQUIRED_COLUMNS = [
+    "transaction_id",
+    "issuer_id",
+    "merchant_id",
+    "mcc",
+    "amount",
+    "country_pair",
+    "channel",
+    "device_risk",
+    "account_age_days",
+    "prior_decline_count",
+    "true_fraud_probability",
+    "true_fraud",
+    "authorization_probability",
+    "authorized",
+    "reporting_probability",
+    "reported",
+    "label_delay_days",
+    "maturity_probability",
+    "matured_by_training",
+    "observed_label_raw",
+    "observed_label_corrupted",
+    "observed",
+    "segment",
+]
+
+
+@pytest.fixture(scope="module")
+def sample_df() -> pd.DataFrame:
+    """A fast, deterministic 100k-row sample for distribution checks."""
+    return generate_synthetic_transactions(n=100_000, seed=42)
+
+
+def test_required_columns_exist(sample_df: pd.DataFrame) -> None:
+    for column in REQUIRED_COLUMNS:
+        assert column in sample_df.columns, f"missing column: {column}"
+
+
+def test_segment_format(sample_df: pd.DataFrame) -> None:
+    row = sample_df.iloc[0]
+    assert row["segment"] == f"{row['mcc']}__{row['country_pair']}__{row['channel']}"
+
+
+def test_true_fraud_rate_in_range(sample_df: pd.DataFrame) -> None:
+    rate = sample_df["true_fraud"].mean()
+    assert 0.008 <= rate <= 0.015, rate
+
+
+def test_authorization_rate_in_range(sample_df: pd.DataFrame) -> None:
+    rate = sample_df["authorized"].mean()
+    assert 0.82 <= rate <= 0.92, rate
+
+
+def test_fraud_authorization_lower_than_legit(sample_df: pd.DataFrame) -> None:
+    fraud_auth = sample_df.loc[sample_df["true_fraud"] == 1, "authorized"].mean()
+    legit_auth = sample_df.loc[sample_df["true_fraud"] == 0, "authorized"].mean()
+    assert fraud_auth < legit_auth, (fraud_auth, legit_auth)
+
+
+def test_observed_label_rate_below_true_fraud_rate(sample_df: pd.DataFrame) -> None:
+    true_rate = sample_df["true_fraud"].mean()
+    observed_fraud_rate = (
+        (sample_df["observed"] == 1) & (sample_df["observed_label_corrupted"] == 1)
+    ).mean()
+    assert observed_fraud_rate < true_rate, (observed_fraud_rate, true_rate)
+
+
+def test_no_observed_label_when_not_observed(sample_df: pd.DataFrame) -> None:
+    unobserved = sample_df[sample_df["observed"] == 0]
+    assert unobserved["observed_label_raw"].isna().all()
+    assert unobserved["observed_label_corrupted"].isna().all()
+
+
+@pytest.mark.skipif(
+    not Path(SYNTHETIC_TRANSACTIONS_CSV).exists(),
+    reason="full dataset not generated; run `python -m labellift.synthetic_data`",
+)
+def test_full_dataset_has_one_million_rows() -> None:
+    df = pd.read_csv(SYNTHETIC_TRANSACTIONS_CSV)
+    assert len(df) == N_TRANSACTIONS
+    for column in REQUIRED_COLUMNS:
+        assert column in df.columns, f"missing column: {column}"
+
+================
+File: .gitignore
+================
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Conductor scratch / workspace
+.context/
+.gstack/
+
+# Generated synthetic data (regenerate with `python -m labellift.*` or the app buttons)
+data/synthetic_transactions.csv
+data/corrected_labels.csv
+data/backtest_metrics.csv
+
+# OS
+.DS_Store
+
+================
+File: app.py
+================
+"""LabelLift MVP — investor-facing Streamlit dashboard.
+
+Run with:
+
+    streamlit run app.py
+
+The dashboard tells one story: fraud models are trained on chargebacks, chargebacks
+are a censored and corrupted view of true fraud, and LabelLift reconstructs corrected
+pseudo-labels so existing fraud models can be trained on a de-biased target.
+
+No authentication, no database, no real payment data — everything is synthetic.
+"""
+
+from __future__ import annotations
+
+import pandas as pd
+import streamlit as st
+
+from labellift.config import (
+    BACKTEST_METRICS_CSV,
+    CORRECTED_LABELS_CSV,
+    LABEL_CORRUPTION_FALSE_NEGATIVE,
+    LABEL_CORRUPTION_FALSE_POSITIVE,
+    SYNTHETIC_TRANSACTIONS_CSV,
+)
+from labellift.plots import (
+    backtest_bar,
+    blindspot_scatter,
+    label_problem_funnel,
+    pseudo_label_histogram,
+)
+
+FN = LABEL_CORRUPTION_FALSE_NEGATIVE
+FP = LABEL_CORRUPTION_FALSE_POSITIVE
+
+# Only the columns the dashboard actually needs (keeps the 1M-row load light).
+LOAD_COLUMNS = [
+    "transaction_id",
+    "issuer_id",
+    "mcc",
+    "amount",
+    "country_pair",
+    "channel",
+    "true_fraud",
+    "authorized",
+    "reported",
+    "matured_by_training",
+    "observed",
+    "observed_label_corrupted",
+    "q_hat_total",
+    "baseline_fraud_score",
+    "labellift_pseudo_label",
+    "label_bias_delta",
+]
+
+st.set_page_config(page_title="LabelLift", page_icon="🛰️", layout="wide")
+
+
+# --- Data loading & preparation (cached) ---------------------------------------
+@st.cache_data(show_spinner=False)
+def load_corrected_labels(mtime: float) -> pd.DataFrame:
+    """Load the corrected-label dataset (cache keyed on file mtime)."""
+    df = pd.read_csv(CORRECTED_LABELS_CSV, usecols=LOAD_COLUMNS)
+    corrected_unclipped = (df["observed_label_corrupted"].fillna(0.0) - FP) / (1.0 - FN - FP)
+    # Horvitz-Thompson numerator: de-noised, inverse-propensity-weighted positives.
+    df["_ht_contribution"] = df["observed"] * corrected_unclipped / df["q_hat_total"]
+    observed_fraud = (df["observed"] == 1) & (df["observed_label_corrupted"] == 1)
+    df["_observed_fraud"] = observed_fraud.astype(int)
+    return df
+
+
+@st.cache_data(show_spinner=False)
+def load_backtest_metrics(mtime: float) -> pd.DataFrame:
+    """Load the backtest metrics table (cache keyed on file mtime)."""
+    return pd.read_csv(BACKTEST_METRICS_CSV)
+
+
+@st.cache_data(show_spinner=False)
+def compute_kpis(mtime: float) -> dict:
+    """Compute the four hero KPIs from the corrected-label dataset."""
+    df = load_corrected_labels(mtime)
+    n = len(df)
+    true_rate = float(df["true_fraud"].mean())
+    observed_rate = float(df["_observed_fraud"].mean())
+    corrected_rate = float(df["_ht_contribution"].sum() / n)
+    undercount = corrected_rate / max(observed_rate, 1e-9)
+    return {
+        "n": n,
+        "true_rate": true_rate,
+        "observed_rate": observed_rate,
+        "corrected_rate": corrected_rate,
+        "undercount": undercount,
+    }
+
+
+@st.cache_data(show_spinner=False)
+def compute_funnel(mtime: float) -> dict[str, int]:
+    """Count how many true frauds survive each censorship stage."""
+    df = load_corrected_labels(mtime)
+    tf = df["true_fraud"] == 1
+    authorized = tf & (df["authorized"] == 1)
+    reported = authorized & (df["reported"] == 1)
+    matured = reported & (df["matured_by_training"] == 1)
+    return {
+        "All transactions": int(len(df)),
+        "True fraud": int(tf.sum()),
+        "Authorized true fraud": int(authorized.sum()),
+        "Reported true fraud": int(reported.sum()),
+        "Matured true fraud": int(matured.sum()),
+        "Observed correctly labeled fraud": int((tf & (df["_observed_fraud"] == 1)).sum()),
+    }
+
+
+@st.cache_data(show_spinner=False)
+def compute_blindspot_atlas(mtime: float) -> pd.DataFrame:
+    """Aggregate the censorship and fraud-rate story per issuer."""
+    df = load_corrected_labels(mtime)
+    grouped = df.groupby("issuer_id")
+    atlas = grouped.agg(
+        transaction_count=("true_fraud", "size"),
+        true_fraud_rate=("true_fraud", "mean"),
+        observed_fraud_rate=("_observed_fraud", "mean"),
+        ht_sum=("_ht_contribution", "sum"),
+        authorized_sum=("authorized", "sum"),
+        reported_sum=("reported", "sum"),
+        matured_sum=("matured_by_training", "sum"),
+    )
+    atlas["corrected_fraud_rate"] = (atlas["ht_sum"] / atlas["transaction_count"]).clip(lower=0.0)
+    atlas["authorization_rate"] = atlas["authorized_sum"] / atlas["transaction_count"]
+    atlas["reporting_rate"] = atlas["reported_sum"] / atlas["authorized_sum"]
+    atlas["maturity_rate"] = atlas["matured_sum"] / atlas["reported_sum"].clip(lower=1)
+    observed_floor = atlas["observed_fraud_rate"].clip(lower=0.0001)
+    atlas["blindspot_multiplier"] = atlas["corrected_fraud_rate"] / observed_floor
+    atlas = atlas.reset_index()[
+        [
+            "issuer_id",
+            "transaction_count",
+            "true_fraud_rate",
+            "observed_fraud_rate",
+            "corrected_fraud_rate",
+            "authorization_rate",
+            "reporting_rate",
+            "maturity_rate",
+            "blindspot_multiplier",
+        ]
+    ]
+    return atlas.sort_values("blindspot_multiplier", ascending=False).reset_index(drop=True)
+
+
+@st.cache_data(show_spinner=False)
+def compute_top_bias(mtime: float) -> pd.DataFrame:
+    """Return the 20 transactions with the largest LabelLift label-bias correction."""
+    df = load_corrected_labels(mtime)
+    columns = [
+        "transaction_id",
+        "issuer_id",
+        "mcc",
+        "amount",
+        "country_pair",
+        "channel",
+        "baseline_fraud_score",
+        "labellift_pseudo_label",
+        "label_bias_delta",
+    ]
+    return df.nlargest(20, "label_bias_delta")[columns].reset_index(drop=True)
+
+
+@st.cache_data(show_spinner=False)
+def sample_scores(mtime: float, n: int = 50_000) -> pd.DataFrame:
+    """Down-sampled scores for a fast, readable histogram."""
+    df = load_corrected_labels(mtime)
+    sample = df.sample(min(n, len(df)), random_state=42)
+    return sample[["baseline_fraud_score", "labellift_pseudo_label"]].reset_index(drop=True)
+
+
+# --- Pipeline runners (for the on-demand buttons) ------------------------------
+def _run_generate() -> None:
+    from labellift import synthetic_data
+
+    with st.spinner("Generating 1,000,000 synthetic transactions…"):
+        synthetic_data.main()
+
+
+def _run_correction() -> None:
+    from labellift import estimator
+
+    with st.spinner("Estimating propensities and computing LabelLift pseudo-labels…"):
+        estimator.main()
+
+
+def _run_backtest() -> None:
+    from labellift import backtest
+
+    with st.spinner("Running the raw-vs-LabelLift backtest…"):
+        backtest.main()
+
+
+def _gate_or_run() -> bool:
+    """Render generation buttons for any missing artifact. Return True if all exist."""
+    if not SYNTHETIC_TRANSACTIONS_CSV.exists():
+        st.info("Step 1 of 3 — the synthetic transaction dataset has not been generated yet.")
+        if st.button("Generate synthetic data", type="primary"):
+            _run_generate()
+            st.rerun()
+        return False
+    if not CORRECTED_LABELS_CSV.exists():
+        st.info("Step 2 of 3 — corrected pseudo-labels have not been computed yet.")
+        if st.button("Run LabelLift correction", type="primary"):
+            _run_correction()
+            st.rerun()
+        return False
+    if not BACKTEST_METRICS_CSV.exists():
+        st.info("Step 3 of 3 — the backtest has not been run yet.")
+        if st.button("Run backtest", type="primary"):
+            _run_backtest()
+            st.rerun()
+        return False
+    return True
+
+
+# --- Section renderers ---------------------------------------------------------
+def render_hero(kpis: dict) -> None:
+    """Section 1 — Hero."""
+    st.title("LabelLift")
+    st.subheader("Causal label infrastructure for fraud AI")
+    st.markdown(
+        "Fraud models are trained on chargebacks. Chargebacks are not ground truth. "
+        "LabelLift reconstructs corrected pseudo-labels from declined, unreported, "
+        "delayed, and miscoded transactions."
+    )
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("True synthetic fraud rate", f"{kpis['true_rate']:.2%}")
+    c2.metric("Observed corrupted fraud rate", f"{kpis['observed_rate']:.2%}")
+    c3.metric("LabelLift corrected fraud rate", f"{kpis['corrected_rate']:.2%}")
+    c4.metric("Observed fraud undercount multiplier", f"{kpis['undercount']:.2f}×")
+    st.caption(
+        "Synthetic MVP demo. No real payment data used. The corrected rate is an "
+        "inverse-propensity reconstruction; the true rate is shown only because the "
+        "data is simulated."
+    )
+
+
+def render_label_problem(funnel_counts: dict[str, int]) -> None:
+    """Section 2 — The label problem."""
+    st.header("The label problem")
+    st.plotly_chart(label_problem_funnel(funnel_counts), use_container_width=True)
+    st.markdown("**The model only sees the final slice, not the full fraud process.**")
+
+
+def render_blindspot_atlas(atlas: pd.DataFrame) -> None:
+    """Section 3 — Blindspot Atlas."""
+    st.header("Blindspot Atlas")
+    st.markdown(
+        "Each issuer under-observes fraud differently, depending on how aggressively it "
+        "declines, how often fraud is reported, and how fast disputes mature. The "
+        "**blindspot multiplier** is how much LabelLift lifts the observed fraud rate."
+    )
+    # Streamlit's NumberColumn `format` applies printf to the raw value without
+    # scaling, so convert the fraction columns to percentage points for display.
+    percent_columns = [
+        "true_fraud_rate",
+        "observed_fraud_rate",
+        "corrected_fraud_rate",
+        "authorization_rate",
+        "reporting_rate",
+        "maturity_rate",
+    ]
+    display = atlas.head(15).copy()
+    display[percent_columns] = display[percent_columns] * 100.0
+    st.dataframe(
+        display,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "issuer_id": "Issuer",
+            "transaction_count": st.column_config.NumberColumn("Transactions", format="%d"),
+            "true_fraud_rate": st.column_config.NumberColumn("True fraud", format="%.2f%%"),
+            "observed_fraud_rate": st.column_config.NumberColumn("Observed", format="%.2f%%"),
+            "corrected_fraud_rate": st.column_config.NumberColumn("Corrected", format="%.2f%%"),
+            "authorization_rate": st.column_config.NumberColumn("Auth rate", format="%.1f%%"),
+            "reporting_rate": st.column_config.NumberColumn("Report rate", format="%.1f%%"),
+            "maturity_rate": st.column_config.NumberColumn("Maturity rate", format="%.1f%%"),
+            "blindspot_multiplier": st.column_config.NumberColumn("Blindspot ×", format="%.2f×"),
+        },
+    )
+    st.caption("Rates shown as percentages. Top 15 issuers by blindspot multiplier.")
+    st.plotly_chart(blindspot_scatter(atlas), use_container_width=True)
+
+
+def render_pseudo_labels(scores: pd.DataFrame, top_bias: pd.DataFrame) -> None:
+    """Section 4 — Corrected pseudo-labels."""
+    st.header("Corrected pseudo-labels")
+    st.plotly_chart(pseudo_label_histogram(scores), use_container_width=True)
+    st.markdown("**Transactions LabelLift re-scores most aggressively upward**")
+    st.dataframe(
+        top_bias,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "transaction_id": "Transaction",
+            "issuer_id": "Issuer",
+            "mcc": "MCC",
+            "amount": st.column_config.NumberColumn("Amount", format="$%.2f"),
+            "country_pair": "Country pair",
+            "channel": "Channel",
+            "baseline_fraud_score": st.column_config.NumberColumn("Baseline", format="%.3f"),
+            "labellift_pseudo_label": st.column_config.NumberColumn("LabelLift", format="%.3f"),
+            "label_bias_delta": st.column_config.NumberColumn("Bias Δ", format="%.3f"),
+        },
+    )
+
+
+def render_backtest(metrics: pd.DataFrame) -> None:
+    """Section 5 — Backtest."""
+    st.header("Backtest")
+    display = metrics.copy()
+    display["model"] = display["model"].map(
+        {
+            "raw_observed_label_model": "Raw observed labels",
+            "labellift_pseudo_label_model": "LabelLift pseudo-labels",
+        }
+    )
+    st.dataframe(display, use_container_width=True, hide_index=True)
+    st.plotly_chart(backtest_bar(metrics), use_container_width=True)
+    st.markdown(
+        "This synthetic backtest uses `true_fraud` only because this is simulated data. "
+        "In a real customer pilot, evaluation uses a later matured holdout window."
+    )
+
+
+def render_pipeline() -> None:
+    """Section 6 — How it plugs into fraud teams."""
+    st.header("How it plugs into fraud teams")
+    st.markdown(
+        "1. Ingest historical transaction and chargeback data.\n"
+        "2. Estimate authorization, reporting, and maturity propensities.\n"
+        "3. Correct corrupted labels.\n"
+        "4. Generate LabelLift pseudo-labels.\n"
+        "5. Train the customer's existing fraud model on corrected labels."
+    )
+
+
+def render_limitations() -> None:
+    """Section 7 — MVP limitations."""
+    st.header("MVP limitations")
+    st.markdown(
+        "- Synthetic data only.\n"
+        "- Collapsed estimator only, not full sequential nested estimator.\n"
+        "- No empirical Bayes issuer shrinkage yet.\n"
+        "- No production data connectors.\n"
+        "- No real customer backtest yet.\n"
+        "- No claim of production fraud-detection lift yet."
+    )
+
+
+def main() -> None:
+    """Render the full LabelLift dashboard, gating on the presence of data artifacts."""
+    if not _gate_or_run():
+        return
+
+    labels_mtime = CORRECTED_LABELS_CSV.stat().st_mtime
+    metrics_mtime = BACKTEST_METRICS_CSV.stat().st_mtime
+
+    with st.spinner("Loading synthetic results…"):
+        kpis = compute_kpis(labels_mtime)
+        funnel_counts = compute_funnel(labels_mtime)
+        atlas = compute_blindspot_atlas(labels_mtime)
+        scores = sample_scores(labels_mtime)
+        top_bias = compute_top_bias(labels_mtime)
+        metrics = load_backtest_metrics(metrics_mtime)
+
+    render_hero(kpis)
+    st.divider()
+    render_label_problem(funnel_counts)
+    st.divider()
+    render_blindspot_atlas(atlas)
+    st.divider()
+    render_pseudo_labels(scores, top_bias)
+    st.divider()
+    render_backtest(metrics)
+    st.divider()
+    render_pipeline()
+    st.divider()
+    render_limitations()
+
+
+# Streamlit executes this module as "__main__"; the guard keeps `import app` safe.
+if __name__ == "__main__":
+    main()
+
+================
+File: pyproject.toml
+================
+[project]
+name = "labellift-mvp"
+version = "0.1.0"
+description = "LabelLift MVP — causal label infrastructure for fraud AI (synthetic demo)"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+================
+File: requirements.txt
+================
+pandas
+numpy
+scikit-learn
+scipy
+plotly
+streamlit
+pytest
+ruff
+
+================
+File: README.md
+================
+# LabelLift MVP
+
+Causal label infrastructure for fraud AI. **This MVP uses synthetic data only.**
+
+## What this is
+
+LabelLift is an offline label-reconstruction engine for fraud models. Fraud teams
+train on chargebacks, but chargebacks are a censored and corrupted view of true
+fraud: declined transactions are never labeled, approved fraud is often never
+reported, reported fraud often matures after the training window, and observed
+labels are miscoded. This MVP simulates that pipeline on 1,000,000 synthetic
+transactions, estimates the authorization / reporting / maturity propensities,
+reconstructs corrected pseudo-labels, and shows in a backtest that training on
+the corrected labels recovers more true synthetic fraud than training on the raw
+observed labels.
+
+## What this is not
+
+- Not a production fraud-detection system and not a replacement for a customer's
+  authorization or decisioning stack.
+- Not trained on any real financial, cardholder, issuer, or merchant data — every
+  value is synthetic and generated from seed `42`.
+- Not the full production estimator. This is the collapsed MVP estimator, not the
+  sequential nested triply robust version, and it has no empirical Bayes issuer
+  shrinkage yet.
+- Not a claim of customer traction, revenue, or live deployment.
+
+## How to run
+
+```bash
+# 1. Create an environment with Python 3.11 and install dependencies
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Build the synthetic dataset, corrected labels, and backtest metrics
+python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv
+python -m labellift.estimator         # -> data/corrected_labels.csv
+python -m labellift.backtest          # -> data/backtest_metrics.csv
+
+# 3. Launch the dashboard
+streamlit run app.py
+```
+
+The dashboard also regenerates any missing data file from a button, so you can
+simply run `streamlit run app.py` on a clean checkout and click through
+*Generate synthetic data → Run LabelLift correction → Run backtest*.
+
+Run the test suite with `pytest` and lint with `ruff check .`.
+
+## Demo flow
+
+1. **Hero** — true vs. observed vs. LabelLift-corrected fraud rate, and the
+   observed undercount multiplier.
+2. **The label problem** — a funnel showing how few true frauds survive
+   authorization, reporting, maturity, and miscoding to become a usable label.
+3. **Blindspot Atlas** — per-issuer table and scatter of where fraud is most
+   under-observed.
+4. **Corrected pseudo-labels** — score distributions and the transactions
+   LabelLift re-scores most aggressively upward.
+5. **Backtest** — raw-label training vs. LabelLift-label training, scored against
+   synthetic ground truth.
+6. **How it plugs into fraud teams** — the five-step pipeline.
+7. **MVP limitations** — what this demo deliberately does not do.
+
+### Backtest result
+
+On the synthetic backtest, the LabelLift pseudo-label model beats the raw observed
+label model on all three headline metrics — average precision, precision@1%, and
+recall@1% — as well as ROC-AUC. The lift is modest and synthetic; it demonstrates
+the mechanism, not a production fraud-detection improvement. If you re-tune the
+pipeline and LabelLift no longer wins, tune the synthetic data generator, not the
+metrics.
+
+## File structure
+
+```text
+labellift-mvp/
+  app.py                      # Streamlit dashboard (the investor demo)
+  README.md
+  requirements.txt
+  pyproject.toml              # ruff line length 100
+  data/
+    synthetic_transactions.csv
+    corrected_labels.csv
+    backtest_metrics.csv
+  labellift/
+    __init__.py
+    config.py                 # seed 42, dataset + corruption + propensity constants
+    synthetic_data.py         # the payment-label observation pipeline
+    propensities.py           # authorization / reporting / maturity propensities
+    estimator.py              # collapsed residual-weighted pseudo-label estimator
+    backtest.py               # raw-label vs. pseudo-label training comparison
+    metrics.py                # precision/recall at top-k%
+    plots.py                  # Plotly figures for the dashboard
+  tests/
+    test_synthetic_data.py
+    test_estimator.py
+    test_backtest.py
+  artifacts/
+    techstars_one_pager.md
+    demo_script.md
+    application_answers.md
+    design_partner_targets.csv
+    outbound_messages.md
+    QA_REPORT.md
+    screenshots/
+```
+
+## Known limitations
+
+- Synthetic data only; no real payment data and no production data connectors.
+- Collapsed estimator only, not the full sequential nested estimator.
+- No empirical Bayes issuer shrinkage yet, so per-issuer corrected rates in the
+  Blindspot Atlas are noisier than the aggregate.
+- No real customer backtest yet and no claim of production fraud-detection lift.
+- Inverse-propensity weighting recovers the aggregate fraud rate well but is
+  variance-sensitive where observation propensities are very small.
+
+
+
+
+
+================================================================
+End of Codebase
+================================================================

@@ -1,0 +1,14 @@
+{
+  "files": [
+    "kpis.json",
+    "funnel.json",
+    "blindspot_atlas.csv",
+    "score_sample.csv",
+    "top_bias.csv",
+    "backtest_metrics.csv"
+  ],
+  "generated_at": "2026-06-09T20:25:28.647693+00:00",
+  "source": "deterministic synthetic data, seed 42",
+  "source_rows": 1000000,
+  "synthetic_only": true
+}

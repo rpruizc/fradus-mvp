@@ -1,0 +1,8 @@
+{
+  "All transactions": 1000000,
+  "Authorized true fraud": 8285,
+  "Matured true fraud": 1910,
+  "Observed correctly labeled fraud": 1789,
+  "Reported true fraud": 3609,
+  "True fraud": 11045
+}

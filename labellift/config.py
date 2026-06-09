@@ -25,7 +25,16 @@ PROPENSITY_CEILING = 0.98
 PACKAGE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = PACKAGE_DIR.parent
 DATA_DIR = PROJECT_ROOT / "data"
+DEMO_DATA_DIR = PROJECT_ROOT / "artifacts" / "demo_data"
 
 SYNTHETIC_TRANSACTIONS_CSV = DATA_DIR / "synthetic_transactions.csv"
 CORRECTED_LABELS_CSV = DATA_DIR / "corrected_labels.csv"
 BACKTEST_METRICS_CSV = DATA_DIR / "backtest_metrics.csv"
+
+DEMO_MANIFEST_JSON = DEMO_DATA_DIR / "manifest.json"
+DEMO_KPIS_JSON = DEMO_DATA_DIR / "kpis.json"
+DEMO_FUNNEL_JSON = DEMO_DATA_DIR / "funnel.json"
+DEMO_BLINDSPOT_ATLAS_CSV = DEMO_DATA_DIR / "blindspot_atlas.csv"
+DEMO_SCORE_SAMPLE_CSV = DEMO_DATA_DIR / "score_sample.csv"
+DEMO_TOP_BIAS_CSV = DEMO_DATA_DIR / "top_bias.csv"
+DEMO_BACKTEST_METRICS_CSV = DEMO_DATA_DIR / "backtest_metrics.csv"

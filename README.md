@@ -25,6 +25,37 @@ observed labels.
   shrinkage yet.
 - Not a claim of customer traction, revenue, or live deployment.
 
+## Self-service hosted demo
+
+The app is now safe to share as a browser link. Hosted deployments load the compact
+precomputed artifacts in `artifacts/demo_data/` by default, so reviewers do not need
+to generate the 1M-row synthetic dataset or click setup buttons.
+
+Recommended Techstars flow:
+
+1. Push this repo to GitHub.
+2. Create a Streamlit Community Cloud app pointed at `app.py`.
+3. Share the resulting public URL.
+
+The hosted demo uses only deterministic synthetic data. The compact artifact bundle
+is about 2 MB; the full generated CSVs in `data/` are still ignored by git and only
+needed for local recomputation.
+
+To refresh the hosted artifacts after changing the synthetic pipeline:
+
+```bash
+uv run python -m labellift.synthetic_data
+uv run python -m labellift.estimator
+uv run python -m labellift.backtest
+uv run python -m labellift.demo_artifacts
+```
+
+To force the app to use the full local CSVs instead of `artifacts/demo_data/`:
+
+```bash
+LABELLIFT_USE_FULL_DATA=1 uv run streamlit run app.py
+```
+
 ## How to run
 
 ### With uv (recommended)
@@ -37,6 +68,7 @@ uv sync
 uv run python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv
 uv run python -m labellift.estimator         # -> data/corrected_labels.csv
 uv run python -m labellift.backtest          # -> data/backtest_metrics.csv
+uv run python -m labellift.demo_artifacts    # -> artifacts/demo_data/*
 
 # 3. Launch the dashboard
 uv run streamlit run app.py
@@ -88,7 +120,7 @@ metrics.
 
 ```text
 labellift-mvp/
-  app.py                      # Streamlit dashboard (the investor demo)
+  app.py                      # Streamlit dashboard (self-service browser demo)
   README.md
   requirements.txt
   pyproject.toml              # ruff line length 100
@@ -103,6 +135,7 @@ labellift-mvp/
     propensities.py           # authorization / reporting / maturity propensities
     estimator.py              # collapsed residual-weighted pseudo-label estimator
     backtest.py               # raw-label vs. pseudo-label training comparison
+    demo_artifacts.py         # compact hosted-demo artifact builder
     metrics.py                # precision/recall at top-k%
     plots.py                  # Plotly figures for the dashboard
   tests/
@@ -110,6 +143,7 @@ labellift-mvp/
     test_estimator.py
     test_backtest.py
   artifacts/
+    demo_data/                # small checked-in data bundle for hosted demos
     techstars_one_pager.md
     demo_script.md
     application_answers.md
