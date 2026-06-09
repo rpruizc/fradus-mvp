@@ -1,4 +1,4 @@
-"""Observation-propensity models for LabelLift.
+"""Observation-propensity models for Fulgor.
 
 A transaction only becomes an observable fraud label if it survives three
 sequential censorship gates: authorization, reporting, and maturity. This module

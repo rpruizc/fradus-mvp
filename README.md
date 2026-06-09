@@ -1,10 +1,10 @@
-# LabelLift MVP
+# Fulgor MVP
 
 Causal label infrastructure for fraud AI. **This MVP uses synthetic data only.**
 
 ## What this is
 
-LabelLift is an offline label-reconstruction engine for fraud models. Fraud teams
+Fulgor is an offline label-reconstruction engine for fraud models. Fraud teams
 train on chargebacks, but chargebacks are a censored and corrupted view of true
 fraud: declined transactions are never labeled, approved fraud is often never
 reported, reported fraud often matures after the training window, and observed
@@ -48,16 +48,16 @@ needed for local recomputation.
 To refresh the hosted artifacts after changing the synthetic pipeline:
 
 ```bash
-uv run python -m labellift.synthetic_data
-uv run python -m labellift.estimator
-uv run python -m labellift.backtest
-uv run python -m labellift.demo_artifacts
+uv run python -m fulgor.synthetic_data
+uv run python -m fulgor.estimator
+uv run python -m fulgor.backtest
+uv run python -m fulgor.demo_artifacts
 ```
 
 To force the app to use the full local CSVs instead of `artifacts/demo_data/`:
 
 ```bash
-LABELLIFT_USE_FULL_DATA=1 uv run streamlit run app.py
+FULGOR_USE_FULL_DATA=1 uv run streamlit run app.py
 ```
 
 ## How to run
@@ -69,10 +69,10 @@ LABELLIFT_USE_FULL_DATA=1 uv run streamlit run app.py
 uv sync
 
 # 2. Build the synthetic dataset, corrected labels, and backtest metrics
-uv run python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv
-uv run python -m labellift.estimator         # -> data/corrected_labels.csv
-uv run python -m labellift.backtest          # -> data/backtest_metrics.csv
-uv run python -m labellift.demo_artifacts    # -> artifacts/demo_data/*
+uv run python -m fulgor.synthetic_data    # -> data/synthetic_transactions.csv
+uv run python -m fulgor.estimator         # -> data/corrected_labels.csv
+uv run python -m fulgor.backtest          # -> data/backtest_metrics.csv
+uv run python -m fulgor.demo_artifacts    # -> artifacts/demo_data/*
 
 # 3. Launch the dashboard
 uv run streamlit run app.py
@@ -86,44 +86,44 @@ Run the test suite with `uv run pytest` and lint with `uv run ruff check .`.
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python -m labellift.synthetic_data
-python -m labellift.estimator
-python -m labellift.backtest
+python -m fulgor.synthetic_data
+python -m fulgor.estimator
+python -m fulgor.backtest
 streamlit run app.py
 ```
 
 The dashboard also regenerates any missing data file from a button, so you can
 simply launch it on a clean checkout and click through
-*Generate synthetic data → Run LabelLift correction → Run backtest*.
+*Generate synthetic data → Run Fulgor correction → Run backtest*.
 
 ## Demo flow
 
-1. **Hero** — true vs. observed vs. LabelLift-corrected fraud rate, and the
+1. **Hero** — true vs. observed vs. Fulgor-corrected fraud rate, and the
    observed undercount multiplier.
 2. **The label problem** — a funnel showing how few true frauds survive
    authorization, reporting, maturity, and miscoding to become a usable label.
 3. **Blindspot Atlas** — per-issuer table and scatter of where fraud is most
    under-observed.
 4. **Corrected pseudo-labels** — score distributions and the transactions
-   LabelLift re-scores most aggressively upward.
-5. **Backtest** — raw-label training vs. LabelLift-label training, scored against
+   Fulgor re-scores most aggressively upward.
+5. **Backtest** — raw-label training vs. Fulgor-label training, scored against
    synthetic ground truth.
 6. **How it plugs into fraud teams** — the five-step pipeline.
 7. **MVP limitations** — what this demo deliberately does not do.
 
 ### Backtest result
 
-On the synthetic backtest, the LabelLift pseudo-label model beats the raw observed
+On the synthetic backtest, the Fulgor pseudo-label model beats the raw observed
 label model on all three headline metrics — average precision, precision@1%, and
 recall@1% — as well as ROC-AUC. The lift is modest and synthetic; it demonstrates
 the mechanism, not a production fraud-detection improvement. If you re-tune the
-pipeline and LabelLift no longer wins, tune the synthetic data generator, not the
+pipeline and Fulgor no longer wins, tune the synthetic data generator, not the
 metrics.
 
 ## File structure
 
 ```text
-labellift-mvp/
+fulgor-mvp/
   app.py                      # Streamlit dashboard (self-service browser demo)
   README.md
   requirements.txt
@@ -132,7 +132,7 @@ labellift-mvp/
     synthetic_transactions.csv
     corrected_labels.csv
     backtest_metrics.csv
-  labellift/
+  fulgor/
     __init__.py
     config.py                 # seed 42, dataset + corruption + propensity constants
     synthetic_data.py         # the payment-label observation pipeline

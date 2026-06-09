@@ -1,4 +1,4 @@
-"""Global configuration constants for the LabelLift MVP.
+"""Global configuration constants for the Fulgor MVP.
 
 Every script in this package is deterministic and seeded from ``RANDOM_SEED`` so
 that all outputs are fully reproducible.

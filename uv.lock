@@ -337,7 +337,7 @@ wheels = [
 ]
 
 [[package]]
-name = "labellift-mvp"
+name = "fulgor-mvp"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

@@ -1,4 +1,4 @@
-"""Collapsed LabelLift pseudo-label estimator (MVP).
+"""Collapsed Fulgor pseudo-label estimator (MVP).
 
 This is the MVP estimator, not the full production sequential triply robust
 estimator. It combines two corrections:
@@ -101,13 +101,13 @@ def apply_label_corruption_correction(
 
 
 def compute_pseudo_labels(df: pd.DataFrame) -> pd.DataFrame:
-    """Compute LabelLift pseudo-labels using the collapsed residual-weighted estimator.
+    """Compute Fulgor pseudo-labels using the collapsed residual-weighted estimator.
 
     Required output columns:
     - baseline_fraud_score
     - observed_label_corrected
     - inverse_observation_weight
-    - labellift_pseudo_label
+    - fulgor_pseudo_label
     - label_bias_delta
 
     Raises:
@@ -140,8 +140,8 @@ def compute_pseudo_labels(df: pd.DataFrame) -> pd.DataFrame:
     out["baseline_fraud_score"] = baseline
     out["observed_label_corrected"] = observed_label_corrected
     out["inverse_observation_weight"] = inverse_observation_weight
-    out["labellift_pseudo_label"] = pseudo
-    out["label_bias_delta"] = out["labellift_pseudo_label"] - out["baseline_fraud_score"]
+    out["fulgor_pseudo_label"] = pseudo
+    out["label_bias_delta"] = out["fulgor_pseudo_label"] - out["baseline_fraud_score"]
     return out
 
 

@@ -1,4 +1,4 @@
-# LabelLift — 3-minute demo script
+# Fulgor — 3-minute demo script
 
 Target length: ~3 minutes. Run `streamlit run app.py` and scroll top to bottom.
 
@@ -12,7 +12,7 @@ Point at the four KPI cards.
 
 > "In this synthetic portfolio the true fraud rate is about 1.1%. But the labels the
 > model actually gets to see? About half a percent. The observed labels undercount
-> real fraud by nearly two times — and that gap is exactly what LabelLift rebuilds."
+> real fraud by nearly two times — and that gap is exactly what Fulgor rebuilds."
 
 ## 0:35 — The label problem funnel (beat 2)
 
@@ -25,13 +25,13 @@ Trace the funnel down.
 > "By the time you reach the bottom, the model is training on a small, biased slice —
 > not the full fraud process. Chargebacks are censored four different ways."
 
-## 1:10 — LabelLift corrects it (beat 3)
+## 1:10 — Fulgor corrects it (beat 3)
 
-> "LabelLift is an offline engine. It estimates the probability each transaction was
+> "Fulgor is an offline engine. It estimates the probability each transaction was
 > authorized, reported, and matured, then reweights and de-noises the observed labels
 > into corrected pseudo-labels."
 
-Point back at the hero's "LabelLift corrected fraud rate."
+Point back at the hero's "Fulgor corrected fraud rate."
 
 > "Notice the corrected rate lands right back near the true 1.1%. We reconstructed the
 > fraud the raw labels had hidden — without ever seeing the ground truth."
@@ -44,17 +44,17 @@ Point back at the hero's "LabelLift corrected fraud rate."
 Point at the top rows and the scatter.
 
 > "Some issuers are off by five or six times. These are the portfolios where a fraud
-> model is most confidently wrong. LabelLift shows you exactly where to look."
+> model is most confidently wrong. Fulgor shows you exactly where to look."
 
 ## 2:10 — Backtest (beat 5)
 
 > "Does correcting the labels actually help? We split the data, train one model on the
-> raw observed labels and one on LabelLift pseudo-labels, and score both against the
+> raw observed labels and one on Fulgor pseudo-labels, and score both against the
 > synthetic ground truth."
 
 Point at the bar chart.
 
-> "LabelLift wins on average precision, on precision at the top 1%, and on recall at
+> "Fulgor wins on average precision, on precision at the top 1%, and on recall at
 > the top 1%. Same model, same features — just a better training target. In a real
 > pilot we'd evaluate on a later matured holdout instead of synthetic truth."
 
@@ -65,4 +65,4 @@ Point at the bar chart.
 > your own data. That's how we turn a fraud team into a design partner, and a design
 > partner into a paid pilot."
 
-> "LabelLift — causal label infrastructure for fraud AI."
+> "Fulgor — causal label infrastructure for fraud AI."

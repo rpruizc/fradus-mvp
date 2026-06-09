@@ -1,4 +1,4 @@
-"""Ranking metrics for the LabelLift backtest.
+"""Ranking metrics for the Fulgor backtest.
 
 Fraud teams operate at a fixed review budget, so top-k% precision and recall are
 the metrics that matter most. These helpers rank transactions by predicted score

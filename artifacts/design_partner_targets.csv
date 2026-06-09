@@ -18,14 +18,14 @@ Global Payments,acquirers,Head of Fraud Analytics,"Acquirer with broad merchant 
 Worldpay,acquirers,Director of Risk Data Science,"High-volume acquirer where label maturity windows vary widely by merchant category",4,yes
 Elavon,acquirers,Head of Fraud Risk,"US Bank acquiring arm with conservative declines that censor fraud labels",3,yes
 Verifi,chargeback/dispute platforms,Head of Product,"Visa-owned dispute platform; deep chargeback timing data and an obvious distribution partner",5,yes
-Ethoca,chargeback/dispute platforms,Director of Analytics,"Mastercard-owned collaboration network with reporting-timing signals LabelLift consumes",5,yes
+Ethoca,chargeback/dispute platforms,Director of Analytics,"Mastercard-owned collaboration network with reporting-timing signals Fulgor consumes",5,yes
 Justt,chargeback/dispute platforms,Head of Data Science,"Dispute-automation vendor sitting on chargeback maturity data and merchant fraud labels",4,yes
 Chargeflow,chargeback/dispute platforms,Cofounder / Head of Data,"Dispute-automation startup, fast-moving, with merchant chargeback histories",3,yes
-Sift,fraud model vendors,VP Data Science,"Fraud-model vendor whose customers all train on biased dispute labels; LabelLift improves their target",5,yes
+Sift,fraud model vendors,VP Data Science,"Fraud-model vendor whose customers all train on biased dispute labels; Fulgor improves their target",5,yes
 Forter,fraud model vendors,Head of Risk Research,"Identity and fraud platform that would benefit from corrected pseudo-labels across merchants",4,yes
 Signifyd,fraud model vendors,Director of ML,"Guaranteed-fraud vendor whose economics depend directly on label accuracy",4,yes
 Sardine,fraud model vendors,Head of Risk ML,"Fraud and compliance platform built on modern ML, receptive to causal label methods",4,yes
 Feedzai,fraud model vendors,Principal Data Scientist,"Enterprise fraud-model vendor serving banks with long, biased label pipelines",4,yes
 Etsy,marketplace risk teams,Head of Marketplace Risk,"Marketplace where seller and payment fraud labels are reported and matured unevenly",3,yes
 StockX,marketplace risk teams,Director of Trust and Safety,"High-value resale marketplace with delayed disputes and concentrated fraud blind spots",3,yes
-Mercari,marketplace risk teams,Head of Trust and Safety,"Consumer marketplace with low reporting rates on low-value fraud, a core LabelLift case",3,yes
+Mercari,marketplace risk teams,Head of Trust and Safety,"Consumer marketplace with low reporting rates on low-value fraud, a core Fulgor case",3,yes

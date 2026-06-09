@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from labellift.backtest import run_backtest
-from labellift.estimator import compute_pseudo_labels
-from labellift.metrics import precision_at_k_percent, recall_at_k_percent
-from labellift.propensities import estimate_propensities
-from labellift.synthetic_data import generate_synthetic_transactions
+from fulgor.backtest import run_backtest
+from fulgor.estimator import compute_pseudo_labels
+from fulgor.metrics import precision_at_k_percent, recall_at_k_percent
+from fulgor.propensities import estimate_propensities
+from fulgor.synthetic_data import generate_synthetic_transactions
 
 METRIC_COLUMNS = [
     "roc_auc",
@@ -41,7 +41,7 @@ def test_backtest_returns_two_rows(backtest_metrics: pd.DataFrame) -> None:
     assert len(backtest_metrics) == 2
     assert set(backtest_metrics["model"]) == {
         "raw_observed_label_model",
-        "labellift_pseudo_label_model",
+        "fulgor_pseudo_label_model",
     }
 
 

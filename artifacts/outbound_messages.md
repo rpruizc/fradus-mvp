@@ -1,4 +1,4 @@
-# LabelLift outbound messages
+# Fulgor outbound messages
 
 Three versions for design-partner outreach. No fabricated traction, no fabricated
 contacts. Personalize the bracketed fields before sending.
@@ -7,7 +7,7 @@ Core message (the through-line for all three):
 
 > Fraud models trained on chargebacks systematically undercount true fraud because
 > declined, unreported, delayed, and miscoded transactions disappear from the
-> training data. LabelLift runs an offline historical backtest and outputs corrected
+> training data. Fulgor runs an offline historical backtest and outputs corrected
 > pseudo-labels for existing fraud models.
 
 CTA (all three):
@@ -20,7 +20,7 @@ CTA (all three):
 
 Hi [First name] — quick one for a [Company] fraud lead. Fraud models trained on
 chargebacks systematically undercount true fraud: declined, unreported, delayed, and
-miscoded transactions vanish from the training data. LabelLift runs an offline
+miscoded transactions vanish from the training data. Fulgor runs an offline
 historical backtest and outputs corrected pseudo-labels for your existing model — no
 change to production. Would you be open to a 20-minute design-partner call?
 
@@ -39,7 +39,7 @@ declined, unreported, delayed, and miscoded transactions disappear from the trai
 data. The bias isn't uniform — it concentrates in specific issuers, segments, and
 corridors, which is where a model is most confidently wrong.
 
-LabelLift runs an offline historical backtest and outputs corrected pseudo-labels for
+Fulgor runs an offline historical backtest and outputs corrected pseudo-labels for
 your existing fraud model. Nothing changes in production; we work from historical
 authorization and chargeback data and hand back corrected labels plus a measured lift
 on your own matured holdout window.
@@ -50,7 +50,7 @@ Would you be open to a 20-minute design-partner call?
 
 Best,
 [Your name]
-LabelLift — causal label infrastructure for fraud AI
+Fulgor — causal label infrastructure for fraud AI
 
 ---
 
@@ -61,7 +61,7 @@ Subject: re: corrected fraud labels for [Company]'s model
 Hi [First name],
 
 Following up briefly. The one-line version: your fraud model is trained on chargebacks,
-and chargebacks quietly drop most true fraud before training. LabelLift reconstructs
+and chargebacks quietly drop most true fraud before training. Fulgor reconstructs
 corrected pseudo-labels offline from your historical data and shows the lift on a
 matured holdout — no production change, no rip-and-replace.
 

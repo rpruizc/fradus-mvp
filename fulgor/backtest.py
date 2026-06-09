@@ -1,11 +1,11 @@
-"""Backtest: does training on LabelLift pseudo-labels recover more true fraud?
+"""Backtest: does training on Fulgor pseudo-labels recover more true fraud?
 
 Two models are trained on the same features and the same training rows:
 
 - Model A (``raw_observed_label_model``) — logistic regression on the raw observed
   corrupted labels, the status quo for fraud teams.
-- Model B (``labellift_pseudo_label_model``) — a gradient-boosted regressor on the
-  continuous LabelLift pseudo-labels.
+- Model B (``fulgor_pseudo_label_model``) — a gradient-boosted regressor on the
+  continuous Fulgor pseudo-labels.
 
 Both are evaluated against synthetic ground-truth ``true_fraud`` on a held-out test
 split. Using ``true_fraud`` is only valid because this is simulated data.
@@ -94,11 +94,11 @@ def _compute_metrics(y_true: pd.Series, y_score: np.ndarray) -> dict:
 
 
 def run_backtest(df: pd.DataFrame) -> pd.DataFrame:
-    """Compare raw-label training against LabelLift pseudo-label training.
+    """Compare raw-label training against Fulgor pseudo-label training.
 
     Returns a metrics dataframe with one row per model:
     - raw_observed_label_model
-    - labellift_pseudo_label_model
+    - fulgor_pseudo_label_model
     """
     ordered = df.sort_values("transaction_id").reset_index(drop=True)
     n_train = int(len(ordered) * TRAIN_FRACTION)
@@ -116,14 +116,14 @@ def run_backtest(df: pd.DataFrame) -> pd.DataFrame:
     )
     score_a = model_a.predict_proba(test_df[FEATURE_COLUMNS])[:, 1]
 
-    # Model B: LabelLift pseudo-labels, all training rows.
+    # Model B: Fulgor pseudo-labels, all training rows.
     model_b = _build_regressor_pipeline()
-    model_b.fit(train_df[FEATURE_COLUMNS], train_df["labellift_pseudo_label"])
+    model_b.fit(train_df[FEATURE_COLUMNS], train_df["fulgor_pseudo_label"])
     score_b = np.clip(model_b.predict(test_df[FEATURE_COLUMNS]), 0.0, 1.0)
 
     rows = [
         {"model": "raw_observed_label_model", **_compute_metrics(y_test, score_a)},
-        {"model": "labellift_pseudo_label_model", **_compute_metrics(y_test, score_b)},
+        {"model": "fulgor_pseudo_label_model", **_compute_metrics(y_test, score_b)},
     ]
     return pd.DataFrame(rows)
 

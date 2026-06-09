@@ -1,11 +1,11 @@
-# LabelLift Application Answers
+# Fulgor Application Answers
 
 Paste-ready. Each answer is under 120 words. No revenue, customer, or live-deployment
 claims.
 
 ## Company one-liner
 
-LabelLift is causal label infrastructure for fraud AI: we reconstruct corrected
+Fulgor is causal label infrastructure for fraud AI: we reconstruct corrected
 pseudo-labels so banks and payment companies stop training fraud models on biased
 chargeback labels.
 

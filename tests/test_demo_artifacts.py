@@ -4,7 +4,7 @@ import json
 
 import pandas as pd
 
-from labellift.demo_artifacts import build_demo_artifacts
+from fulgor.demo_artifacts import build_demo_artifacts
 
 
 def test_build_demo_artifacts_writes_compact_bundle(tmp_path) -> None:
@@ -24,13 +24,13 @@ def test_build_demo_artifacts_writes_compact_bundle(tmp_path) -> None:
             "observed_label_corrupted": [1.0, None, None, 0.0],
             "q_hat_total": [0.50, 0.40, 0.20, 0.60],
             "baseline_fraud_score": [0.30, 0.10, 0.70, 0.20],
-            "labellift_pseudo_label": [0.95, 0.10, 0.70, 0.00],
+            "fulgor_pseudo_label": [0.95, 0.10, 0.70, 0.00],
             "label_bias_delta": [0.65, 0.00, 0.00, -0.20],
         }
     )
     metrics = pd.DataFrame(
         {
-            "model": ["raw_observed_label_model", "labellift_pseudo_label_model"],
+            "model": ["raw_observed_label_model", "fulgor_pseudo_label_model"],
             "average_precision": [0.2, 0.3],
         }
     )

@@ -1,11 +1,11 @@
-"""LabelLift MVP — investor-facing Streamlit dashboard.
+"""Fulgor MVP — investor-facing Streamlit dashboard.
 
 Run with:
 
     streamlit run app.py
 
 The dashboard tells one story: fraud models are trained on chargebacks, chargebacks
-are a censored and corrupted view of true fraud, and LabelLift reconstructs corrected
+are a censored and corrupted view of true fraud, and Fulgor reconstructs corrected
 pseudo-labels so existing fraud models can be trained on a de-biased target.
 
 No authentication, no database, no real payment data — everything is synthetic.
@@ -19,7 +19,7 @@ import os
 import pandas as pd
 import streamlit as st
 
-from labellift.config import (
+from fulgor.config import (
     BACKTEST_METRICS_CSV,
     CORRECTED_LABELS_CSV,
     DEMO_BACKTEST_METRICS_CSV,
@@ -33,7 +33,7 @@ from labellift.config import (
     LABEL_CORRUPTION_FALSE_POSITIVE,
     SYNTHETIC_TRANSACTIONS_CSV,
 )
-from labellift.plots import (
+from fulgor.plots import (
     backtest_bar,
     blindspot_scatter,
     label_problem_funnel,
@@ -59,7 +59,7 @@ LOAD_COLUMNS = [
     "observed_label_corrupted",
     "q_hat_total",
     "baseline_fraud_score",
-    "labellift_pseudo_label",
+    "fulgor_pseudo_label",
     "label_bias_delta",
 ]
 
@@ -73,7 +73,7 @@ DEMO_ARTIFACTS = [
     DEMO_BACKTEST_METRICS_CSV,
 ]
 
-st.set_page_config(page_title="LabelLift", page_icon="🛰️", layout="wide")
+st.set_page_config(page_title="Fulgor", page_icon="🛰️", layout="wide")
 
 
 # --- Data loading & preparation (cached) ---------------------------------------
@@ -89,7 +89,7 @@ def _demo_artifacts_mtime() -> float:
 
 def _should_use_demo_artifacts() -> bool:
     """Prefer compact artifacts unless a local full-data run is explicitly requested."""
-    return _demo_artifacts_available() and os.environ.get("LABELLIFT_USE_FULL_DATA") != "1"
+    return _demo_artifacts_available() and os.environ.get("FULGOR_USE_FULL_DATA") != "1"
 
 
 @st.cache_data(show_spinner=False)
@@ -220,7 +220,7 @@ def compute_blindspot_atlas(mtime: float) -> pd.DataFrame:
 
 @st.cache_data(show_spinner=False)
 def compute_top_bias(mtime: float) -> pd.DataFrame:
-    """Return the 20 transactions with the largest LabelLift label-bias correction."""
+    """Return the 20 transactions with the largest Fulgor label-bias correction."""
     df = load_corrected_labels(mtime)
     columns = [
         "transaction_id",
@@ -230,7 +230,7 @@ def compute_top_bias(mtime: float) -> pd.DataFrame:
         "country_pair",
         "channel",
         "baseline_fraud_score",
-        "labellift_pseudo_label",
+        "fulgor_pseudo_label",
         "label_bias_delta",
     ]
     return df.nlargest(20, "label_bias_delta")[columns].reset_index(drop=True)
@@ -241,28 +241,28 @@ def sample_scores(mtime: float, n: int = 50_000) -> pd.DataFrame:
     """Down-sampled scores for a fast, readable histogram."""
     df = load_corrected_labels(mtime)
     sample = df.sample(min(n, len(df)), random_state=42)
-    return sample[["baseline_fraud_score", "labellift_pseudo_label"]].reset_index(drop=True)
+    return sample[["baseline_fraud_score", "fulgor_pseudo_label"]].reset_index(drop=True)
 
 
 # --- Pipeline runners (for the on-demand buttons) ------------------------------
 def _run_generate() -> None:
-    from labellift import synthetic_data
+    from fulgor import synthetic_data
 
     with st.spinner("Generating 1,000,000 synthetic transactions…"):
         synthetic_data.main()
 
 
 def _run_correction() -> None:
-    from labellift import estimator
+    from fulgor import estimator
 
-    with st.spinner("Estimating propensities and computing LabelLift pseudo-labels…"):
+    with st.spinner("Estimating propensities and computing Fulgor pseudo-labels…"):
         estimator.main()
 
 
 def _run_backtest() -> None:
-    from labellift import backtest
+    from fulgor import backtest
 
-    with st.spinner("Running the raw-vs-LabelLift backtest…"):
+    with st.spinner("Running the raw-vs-Fulgor backtest…"):
         backtest.main()
 
 
@@ -276,7 +276,7 @@ def _gate_or_run() -> bool:
         return False
     if not CORRECTED_LABELS_CSV.exists():
         st.info("Step 2 of 3 — corrected pseudo-labels have not been computed yet.")
-        if st.button("Run LabelLift correction", type="primary"):
+        if st.button("Run Fulgor correction", type="primary"):
             _run_correction()
             st.rerun()
         return False
@@ -292,17 +292,17 @@ def _gate_or_run() -> bool:
 # --- Section renderers ---------------------------------------------------------
 def render_hero(kpis: dict) -> None:
     """Section 1 — Hero."""
-    st.title("LabelLift")
+    st.title("Fulgor")
     st.subheader("Causal label infrastructure for fraud AI")
     st.markdown(
         "Fraud models are trained on chargebacks. Chargebacks are not ground truth. "
-        "LabelLift reconstructs corrected pseudo-labels from declined, unreported, "
+        "Fulgor reconstructs corrected pseudo-labels from declined, unreported, "
         "delayed, and miscoded transactions."
     )
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("True synthetic fraud rate", f"{kpis['true_rate']:.2%}")
     c2.metric("Observed corrupted fraud rate", f"{kpis['observed_rate']:.2%}")
-    c3.metric("LabelLift corrected fraud rate", f"{kpis['corrected_rate']:.2%}")
+    c3.metric("Fulgor corrected fraud rate", f"{kpis['corrected_rate']:.2%}")
     c4.metric("Observed fraud undercount multiplier", f"{kpis['undercount']:.2f}×")
     st.caption(
         "Synthetic MVP demo. No real payment data used. The corrected rate is an "
@@ -315,11 +315,11 @@ def render_reviewer_brief(kpis: dict, metrics: pd.DataFrame) -> None:
     """Short self-service summary for reviewers who open the app without a walkthrough."""
     indexed = metrics.set_index("model")
     raw_ap = float(indexed.loc["raw_observed_label_model", "average_precision"])
-    lift_ap = float(indexed.loc["labellift_pseudo_label_model", "average_precision"])
+    lift_ap = float(indexed.loc["fulgor_pseudo_label_model", "average_precision"])
     ap_lift = (lift_ap / raw_ap - 1.0) * 100.0
     hidden_share = 1.0 - (kpis["observed_rate"] / max(kpis["true_rate"], 1e-9))
     st.info(
-        "Reviewer summary: LabelLift is an offline label-reconstruction layer, not a new "
+        "Reviewer summary: Fulgor is an offline label-reconstruction layer, not a new "
         "authorization model. This deterministic demo shows that raw chargeback labels miss "
         f"{hidden_share:.0%} of synthetic fraud prevalence; the corrected labels recover the "
         f"missing signal and improve average precision by {ap_lift:.1f}% in the synthetic "
@@ -341,7 +341,7 @@ def render_blindspot_atlas(atlas: pd.DataFrame) -> None:
     st.markdown(
         "Each issuer under-observes fraud differently, depending on how aggressively it "
         "declines, how often fraud is reported, and how fast disputes mature. The "
-        "**blindspot multiplier** is how much LabelLift lifts the observed fraud rate."
+        "**blindspot multiplier** is how much Fulgor lifts the observed fraud rate."
     )
     # Streamlit's NumberColumn `format` applies printf to the raw value without
     # scaling, so convert the fraction columns to percentage points for display.
@@ -379,7 +379,7 @@ def render_pseudo_labels(scores: pd.DataFrame, top_bias: pd.DataFrame) -> None:
     """Section 4 — Corrected pseudo-labels."""
     st.header("Corrected pseudo-labels")
     st.plotly_chart(pseudo_label_histogram(scores), width="stretch")
-    st.markdown("**Transactions LabelLift re-scores most aggressively upward**")
+    st.markdown("**Transactions Fulgor re-scores most aggressively upward**")
     st.dataframe(
         top_bias,
         width="stretch",
@@ -392,7 +392,7 @@ def render_pseudo_labels(scores: pd.DataFrame, top_bias: pd.DataFrame) -> None:
             "country_pair": "Country pair",
             "channel": "Channel",
             "baseline_fraud_score": st.column_config.NumberColumn("Baseline", format="%.3f"),
-            "labellift_pseudo_label": st.column_config.NumberColumn("LabelLift", format="%.3f"),
+            "fulgor_pseudo_label": st.column_config.NumberColumn("Fulgor", format="%.3f"),
             "label_bias_delta": st.column_config.NumberColumn("Bias Δ", format="%.3f"),
         },
     )
@@ -405,7 +405,7 @@ def render_backtest(metrics: pd.DataFrame) -> None:
     display["model"] = display["model"].map(
         {
             "raw_observed_label_model": "Raw observed labels",
-            "labellift_pseudo_label_model": "LabelLift pseudo-labels",
+            "fulgor_pseudo_label_model": "Fulgor pseudo-labels",
         }
     )
     st.dataframe(display, width="stretch", hide_index=True)
@@ -423,7 +423,7 @@ def render_pipeline() -> None:
         "1. Ingest historical transaction and chargeback data.\n"
         "2. Estimate authorization, reporting, and maturity propensities.\n"
         "3. Correct corrupted labels.\n"
-        "4. Generate LabelLift pseudo-labels.\n"
+        "4. Generate Fulgor pseudo-labels.\n"
         "5. Train the customer's existing fraud model on corrected labels."
     )
 
@@ -467,7 +467,7 @@ def render_dashboard(
 
 
 def main() -> None:
-    """Render the full LabelLift dashboard, gating on the presence of data artifacts."""
+    """Render the full Fulgor dashboard, gating on the presence of data artifacts."""
     if _should_use_demo_artifacts():
         demo_mtime = _demo_artifacts_mtime()
         with st.spinner("Loading self-service demo…"):

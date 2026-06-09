@@ -44,7 +44,7 @@ LOAD_COLUMNS = [
     "observed_label_corrupted",
     "q_hat_total",
     "baseline_fraud_score",
-    "labellift_pseudo_label",
+    "fulgor_pseudo_label",
     "label_bias_delta",
 ]
 
@@ -146,7 +146,7 @@ def _compute_top_bias(df: pd.DataFrame, n: int = 20) -> pd.DataFrame:
         "country_pair",
         "channel",
         "baseline_fraud_score",
-        "labellift_pseudo_label",
+        "fulgor_pseudo_label",
         "label_bias_delta",
     ]
     return df.nlargest(n, "label_bias_delta")[columns].reset_index(drop=True)
@@ -155,7 +155,7 @@ def _compute_top_bias(df: pd.DataFrame, n: int = 20) -> pd.DataFrame:
 def _sample_scores(df: pd.DataFrame, n: int = 50_000) -> pd.DataFrame:
     """Down-sample score distributions for fast hosted rendering."""
     sample = df.sample(min(n, len(df)), random_state=42)
-    return sample[["baseline_fraud_score", "labellift_pseudo_label"]].reset_index(drop=True)
+    return sample[["baseline_fraud_score", "fulgor_pseudo_label"]].reset_index(drop=True)
 
 
 def build_demo_artifacts(
@@ -166,11 +166,11 @@ def build_demo_artifacts(
     """Build all compact hosted-demo artifacts from generated full CSV outputs."""
     if not corrected_labels_path.exists():
         raise FileNotFoundError(
-            f"Missing {corrected_labels_path}. Run `python -m labellift.estimator` first."
+            f"Missing {corrected_labels_path}. Run `python -m fulgor.estimator` first."
         )
     if not backtest_metrics_path.exists():
         raise FileNotFoundError(
-            f"Missing {backtest_metrics_path}. Run `python -m labellift.backtest` first."
+            f"Missing {backtest_metrics_path}. Run `python -m fulgor.backtest` first."
         )
 
     output_dir.mkdir(parents=True, exist_ok=True)

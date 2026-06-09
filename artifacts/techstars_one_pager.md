@@ -1,8 +1,8 @@
-# LabelLift
+# Fulgor
 
 ## One-liner
 
-LabelLift fixes corrupted fraud-training labels before banks and payment companies
+Fulgor fixes corrupted fraud-training labels before banks and payment companies
 train their fraud models.
 
 ## Problem
@@ -22,7 +22,7 @@ where teams least want a blind spot.
 
 ## Solution
 
-LabelLift is an offline label-reconstruction engine. It estimates the probability
+Fulgor is an offline label-reconstruction engine. It estimates the probability
 that each historical transaction was authorized, reported, and matured in time,
 then reweights and de-noises the observed labels into corrected pseudo-labels.
 Customers train their existing fraud models on these corrected pseudo-labels. It is

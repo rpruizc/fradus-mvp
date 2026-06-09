@@ -1,4 +1,4 @@
-transaction_id,issuer_id,mcc,amount,country_pair,channel,baseline_fraud_score,labellift_pseudo_label,label_bias_delta
+transaction_id,issuer_id,mcc,amount,country_pair,channel,baseline_fraud_score,fulgor_pseudo_label,label_bias_delta
 TXN_00857541,ISSUER_038,subscription,134.56,domestic,wallet,0.0362656287351526,1.0,0.9637343712648472
 TXN_00312286,ISSUER_031,subscription,21.02,cross_border,card_present,0.0387484919795096,1.0,0.9612515080204904
 TXN_00738273,ISSUER_037,marketplace,42.01,cross_border,wallet,0.0432444817931814,1.0,0.9567555182068186

@@ -1,4 +1,4 @@
-# LabelLift Product Architecture
+# Fulgor Product Architecture
 
 Status: accepted for Release v0.1.
 
@@ -6,12 +6,12 @@ Paper source: Section 10.5 offline-online architecture.
 
 ## Decision
 
-LabelLift will move from a Streamlit demo script to a production-shaped offline-online
+Fulgor will move from a Streamlit demo script to a production-shaped offline-online
 product architecture:
 
-- Core package: `labellift/` remains the Python estimator and artifact package.
+- Core package: `fulgor/` remains the Python estimator and artifact package.
 - Pipeline: Python CLI and job entrypoints produce durable run artifacts.
-- API: FastAPI in `services/api/labellift_api/` exposes health, version, and
+- API: FastAPI in `services/api/fulgor_api/` exposes health, version, and
   artifact-backed JSON endpoints.
 - Web UI: React + TypeScript + Vite in `apps/web/` renders the browser product.
 - Styling and UI primitives: Tailwind CSS, Headless UI, and Heroicons.
@@ -24,7 +24,7 @@ belongs behind the FastAPI service and React web app.
 
 ## Boundary
 
-`labellift/` owns estimator logic, synthetic demo generation, artifact contracts,
+`fulgor/` owns estimator logic, synthetic demo generation, artifact contracts,
 and offline reconstruction code. It must not depend on the web UI or API layer.
 
 The pipeline layer owns scheduled or manually triggered offline runs. Its output
@@ -42,7 +42,7 @@ directly.
 
 ## Why The Estimator Stays Offline
 
-Section 10.5 describes LabelLift as an offline label-reconstruction engine whose
+Section 10.5 describes Fulgor as an offline label-reconstruction engine whose
 outputs feed downstream fraud modeling and review workflows. The estimator uses
 historical transactions, delayed reports, matured holdout windows, nuisance-model
 fits, diagnostics, and corrected label outputs. Those are batch reconstruction
@@ -65,7 +65,7 @@ Keeping estimation offline gives the product clearer operational boundaries:
 stats, tables, forms, alerts, tabs, drawers, modals, and page composition.
 
 Runtime code must not import from `application-ui-v4/`. Any selected example must
-be copied, adapted for LabelLift-specific props and data, tested locally, and
+be copied, adapted for Fulgor-specific props and data, tested locally, and
 committed under `apps/web/src/`.
 
 ## Demo And Privacy Guardrails

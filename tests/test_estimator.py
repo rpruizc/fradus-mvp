@@ -1,16 +1,16 @@
-"""Tests for the propensity models (Agent 3) and the LabelLift estimator (Agent 4)."""
+"""Tests for the propensity models (Agent 3) and the Fulgor estimator (Agent 4)."""
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from labellift.config import PROPENSITY_CEILING, PROPENSITY_FLOOR
-from labellift.estimator import (
+from fulgor.config import PROPENSITY_CEILING, PROPENSITY_FLOOR
+from fulgor.estimator import (
     apply_label_corruption_correction,
     compute_pseudo_labels,
 )
-from labellift.propensities import estimate_propensities
-from labellift.synthetic_data import generate_synthetic_transactions
+from fulgor.propensities import estimate_propensities
+from fulgor.synthetic_data import generate_synthetic_transactions
 
 PROPENSITY_COLUMNS = [
     "e_hat_authorization",
@@ -22,7 +22,7 @@ ESTIMATOR_COLUMNS = [
     "baseline_fraud_score",
     "observed_label_corrected",
     "inverse_observation_weight",
-    "labellift_pseudo_label",
+    "fulgor_pseudo_label",
     "label_bias_delta",
 ]
 
@@ -41,7 +41,7 @@ def propensity_df(base_df: pd.DataFrame) -> pd.DataFrame:
 
 @pytest.fixture(scope="module")
 def pseudo_df(propensity_df: pd.DataFrame) -> pd.DataFrame:
-    """Sample with the LabelLift pseudo-label columns attached."""
+    """Sample with the Fulgor pseudo-label columns attached."""
     return compute_pseudo_labels(propensity_df)
 
 
@@ -90,7 +90,7 @@ def test_estimator_columns_exist(pseudo_df: pd.DataFrame) -> None:
 
 
 def test_pseudo_labels_in_unit_interval(pseudo_df: pd.DataFrame) -> None:
-    pseudo = pseudo_df["labellift_pseudo_label"]
+    pseudo = pseudo_df["fulgor_pseudo_label"]
     assert pseudo.min() >= 0.0
     assert pseudo.max() <= 1.0
     assert not pseudo.isna().any()

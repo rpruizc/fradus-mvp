@@ -1,7 +1,7 @@
-"""LabelLift MVP package.
+"""Fulgor MVP package.
 
 Causal label infrastructure for fraud AI. This package implements a synthetic
-demonstration of the LabelLift label-reconstruction pipeline:
+demonstration of the Fulgor label-reconstruction pipeline:
 
 - ``synthetic_data``  — generate the payment-label observation pipeline.
 - ``propensities``    — estimate authorization, reporting, and maturity propensities.

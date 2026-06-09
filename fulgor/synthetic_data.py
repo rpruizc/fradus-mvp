@@ -5,7 +5,7 @@ fraud-training label:
 
     true_fraud  ->  authorized  ->  reported  ->  matured_by_training  ->  observed
 
-Each stage censors the data. The point of the LabelLift MVP is that fraud models
+Each stage censors the data. The point of the Fulgor MVP is that fraud models
 only ever see the final ``observed`` slice, which is a biased sample of true fraud.
 
 All randomness flows from a single seeded NumPy generator so the dataset is exactly
@@ -73,7 +73,7 @@ AUTH_COEF_DECLINE = 0.25
 # --- Reporting logistic coefficients -------------------------------------------
 # Reporting depends only on observable covariates (a function of the fraud-risk
 # score), never on the latent ``true_fraud`` flag. This keeps the observation
-# process missing-at-random given X, which is exactly the assumption LabelLift's
+# process missing-at-random given X, which is exactly the assumption Fulgor's
 # inverse-propensity correction relies on. Risky transactions are reported more
 # often, so true fraud is still reported more than legit traffic on average.
 REPORT_INTERCEPT = -4.65
@@ -116,7 +116,7 @@ def generate_synthetic_transactions(
 
     Returns:
         A dataframe with one row per synthetic transaction and every column
-        required by the LabelLift pipeline.
+        required by the Fulgor pipeline.
     """
     rng = np.random.default_rng(seed)
 

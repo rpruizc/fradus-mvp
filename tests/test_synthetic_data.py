@@ -5,8 +5,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from labellift.config import N_TRANSACTIONS, SYNTHETIC_TRANSACTIONS_CSV
-from labellift.synthetic_data import generate_synthetic_transactions
+from fulgor.config import N_TRANSACTIONS, SYNTHETIC_TRANSACTIONS_CSV
+from fulgor.synthetic_data import generate_synthetic_transactions
 
 REQUIRED_COLUMNS = [
     "transaction_id",
@@ -83,7 +83,7 @@ def test_no_observed_label_when_not_observed(sample_df: pd.DataFrame) -> None:
 
 @pytest.mark.skipif(
     not Path(SYNTHETIC_TRANSACTIONS_CSV).exists(),
-    reason="full dataset not generated; run `python -m labellift.synthetic_data`",
+    reason="full dataset not generated; run `python -m fulgor.synthetic_data`",
 )
 def test_full_dataset_has_one_million_rows() -> None:
     df = pd.read_csv(SYNTHETIC_TRANSACTIONS_CSV)

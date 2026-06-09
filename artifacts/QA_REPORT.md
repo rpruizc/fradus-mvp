@@ -1,15 +1,15 @@
 # QA Report
 
-Integration and end-to-end QA for the LabelLift MVP. Environment: Python 3.11.15,
+Integration and end-to-end QA for the Fulgor MVP. Environment: Python 3.11.15,
 fixed stack from `requirements.txt` (pandas 3.0, numpy 2.4, scikit-learn 1.9,
 scipy, plotly, streamlit 1.58, pytest, ruff). All data is synthetic, seed `42`.
 
 ## Commands run
 
 ```bash
-python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv (1,000,000 rows, 176 MB)
-python -m labellift.estimator         # -> data/corrected_labels.csv (304 MB)
-python -m labellift.backtest          # -> data/backtest_metrics.csv (2 rows)
+python -m fulgor.synthetic_data    # -> data/synthetic_transactions.csv (1,000,000 rows, 176 MB)
+python -m fulgor.estimator         # -> data/corrected_labels.csv (304 MB)
+python -m fulgor.backtest          # -> data/backtest_metrics.csv (2 rows)
 pytest                                # 27 passed
 ruff check .                          # All checks passed
 streamlit run app.py                  # dashboard renders, all 7 sections, no errors
@@ -46,16 +46,16 @@ streamlit run app.py                  # dashboard renders, all 7 sections, no er
 | Maturity rate among reported true fraud | 45%–80% | 53.7% |
 | Observed label rate < true fraud rate | yes | 0.55% < 1.10% |
 
-### Backtest result (LabelLift vs. raw observed labels)
+### Backtest result (Fulgor vs. raw observed labels)
 
-| Metric | Raw | LabelLift | LabelLift wins |
+| Metric | Raw | Fulgor | Fulgor wins |
 | --- | --- | --- | --- |
 | Average precision | 0.0713 | 0.0740 | yes |
 | Precision @ 1% | 0.1390 | 0.1447 | yes |
 | Recall @ 1% | 0.1278 | 0.1330 | yes |
 | ROC-AUC | 0.8054 | 0.8103 | yes |
 
-LabelLift beats raw-label training on all three acceptance metrics (and ROC-AUC).
+Fulgor beats raw-label training on all three acceptance metrics (and ROC-AUC).
 The lift is modest and synthetic; it demonstrates the mechanism, not a production
 fraud-detection improvement.
 
@@ -63,7 +63,7 @@ fraud-detection improvement.
 
 1. **Observation was outcome-dependent (MNAR).** The first synthetic generator made
    the reporting probability depend directly on the latent `true_fraud` flag. That
-   violates the missing-at-random assumption LabelLift's inverse-propensity
+   violates the missing-at-random assumption Fulgor's inverse-propensity
    correction relies on, so the corrected fraud rate was unrecoverable (it overshot
    true prevalence by more than 10x).
 2. **Label-noise correction did nothing in aggregate.** The clipped, per-row

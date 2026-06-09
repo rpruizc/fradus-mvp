@@ -1,4 +1,4 @@
-"""Plotly figures for the LabelLift Streamlit dashboard.
+"""Plotly figures for the Fulgor Streamlit dashboard.
 
 These helpers turn aggregated dataframes into investor-readable charts. They never
 load data themselves — the dashboard passes in prepared frames so every figure is
@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 
 # A small, consistent palette so the dashboard reads as one product.
 COLOR_OBSERVED = "#9aa7b8"  # muted slate — the censored view
-COLOR_LABELLIFT = "#2f6df6"  # LabelLift blue — the corrected view
+COLOR_FULGOR = "#2f6df6"  # Fulgor blue — the corrected view
 COLOR_TRUE = "#13b981"  # green — synthetic ground truth
 COLOR_FUNNEL = "#2f6df6"
 
@@ -63,7 +63,7 @@ def blindspot_scatter(atlas: pd.DataFrame) -> go.Figure:
                 "colorscale": "Blues",
                 "showscale": True,
                 "colorbar": {"title": "Blindspot<br>multiplier"},
-                "line": {"width": 1, "color": COLOR_LABELLIFT},
+                "line": {"width": 1, "color": COLOR_FULGOR},
             },
             text=atlas["issuer_id"],
             hovertemplate=(
@@ -90,7 +90,7 @@ def blindspot_scatter(atlas: pd.DataFrame) -> go.Figure:
         margin={"l": 10, "r": 10, "t": 30, "b": 10},
         height=460,
         xaxis={"title": "Observed fraud rate (what the model sees)", "tickformat": ".2%"},
-        yaxis={"title": "LabelLift corrected fraud rate", "tickformat": ".2%"},
+        yaxis={"title": "Fulgor corrected fraud rate", "tickformat": ".2%"},
         title="Per-issuer fraud blind spots",
         showlegend=False,
     )
@@ -98,7 +98,7 @@ def blindspot_scatter(atlas: pd.DataFrame) -> go.Figure:
 
 
 def pseudo_label_histogram(scores: pd.DataFrame) -> go.Figure:
-    """Overlaid histogram of baseline scores vs. LabelLift pseudo-labels."""
+    """Overlaid histogram of baseline scores vs. Fulgor pseudo-labels."""
     fig = go.Figure()
     fig.add_trace(
         go.Histogram(
@@ -111,10 +111,10 @@ def pseudo_label_histogram(scores: pd.DataFrame) -> go.Figure:
     )
     fig.add_trace(
         go.Histogram(
-            x=scores["labellift_pseudo_label"],
-            name="LabelLift pseudo-label",
+            x=scores["fulgor_pseudo_label"],
+            name="Fulgor pseudo-label",
             opacity=0.65,
-            marker_color=COLOR_LABELLIFT,
+            marker_color=COLOR_FULGOR,
             nbinsx=60,
         )
     )
@@ -124,7 +124,7 @@ def pseudo_label_histogram(scores: pd.DataFrame) -> go.Figure:
         height=420,
         yaxis={"title": "Transactions", "type": "log"},
         xaxis={"title": "Score"},
-        title="Baseline vs. LabelLift score distribution (log scale)",
+        title="Baseline vs. Fulgor score distribution (log scale)",
         legend={"orientation": "h", "y": -0.25, "x": 0},
     )
     return fig
@@ -140,7 +140,7 @@ def backtest_bar(metrics: pd.DataFrame) -> go.Figure:
     indexed = metrics.set_index("model")
     model_styles = {
         "raw_observed_label_model": ("Raw observed labels", COLOR_OBSERVED),
-        "labellift_pseudo_label_model": ("LabelLift pseudo-labels", COLOR_LABELLIFT),
+        "fulgor_pseudo_label_model": ("Fulgor pseudo-labels", COLOR_FULGOR),
     }
     fig = go.Figure()
     x_labels = [label for _, label in display_metrics]
@@ -163,7 +163,7 @@ def backtest_bar(metrics: pd.DataFrame) -> go.Figure:
         margin={"l": 10, "r": 10, "t": 50, "b": 60},
         height=440,
         yaxis={"title": "Score (higher is better)"},
-        title="Recovering true fraud: raw labels vs. LabelLift",
+        title="Recovering true fraud: raw labels vs. Fulgor",
         legend={"orientation": "h", "y": -0.15, "x": 0},
     )
     return fig
