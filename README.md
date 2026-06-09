@@ -27,26 +27,38 @@ observed labels.
 
 ## How to run
 
+### With uv (recommended)
+
 ```bash
-# 1. Create an environment with Python 3.11 and install dependencies
+# 1. Install dependencies into a Python 3.11 environment (uses uv.lock)
+uv sync
+
+# 2. Build the synthetic dataset, corrected labels, and backtest metrics
+uv run python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv
+uv run python -m labellift.estimator         # -> data/corrected_labels.csv
+uv run python -m labellift.backtest          # -> data/backtest_metrics.csv
+
+# 3. Launch the dashboard
+uv run streamlit run app.py
+```
+
+Run the test suite with `uv run pytest` and lint with `uv run ruff check .`.
+
+### With pip
+
+```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# 2. Build the synthetic dataset, corrected labels, and backtest metrics
-python -m labellift.synthetic_data    # -> data/synthetic_transactions.csv
-python -m labellift.estimator         # -> data/corrected_labels.csv
-python -m labellift.backtest          # -> data/backtest_metrics.csv
-
-# 3. Launch the dashboard
+python -m labellift.synthetic_data
+python -m labellift.estimator
+python -m labellift.backtest
 streamlit run app.py
 ```
 
 The dashboard also regenerates any missing data file from a button, so you can
-simply run `streamlit run app.py` on a clean checkout and click through
+simply launch it on a clean checkout and click through
 *Generate synthetic data → Run LabelLift correction → Run backtest*.
-
-Run the test suite with `pytest` and lint with `ruff check .`.
 
 ## Demo flow
 

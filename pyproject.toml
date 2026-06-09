@@ -3,6 +3,20 @@ name = "labellift-mvp"
 version = "0.1.0"
 description = "LabelLift MVP — causal label infrastructure for fraud AI (synthetic demo)"
 requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "scipy",
+    "plotly",
+    "streamlit",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
 
 [tool.ruff]
 line-length = 100
@@ -12,3 +26,4 @@ select = ["E", "F", "I", "W"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
